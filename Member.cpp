@@ -1,4 +1,4 @@
-#include "member.h"
+#include "Member.h"
 #include <iostream>
 
 using std::cout;

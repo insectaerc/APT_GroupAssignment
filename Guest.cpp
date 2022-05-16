@@ -11,7 +11,7 @@ using std::cin;
 using std::endl;
 using std::ofstream;
 
-class guest: public House
+class Guest: public House
     {
      int rating;
      public:

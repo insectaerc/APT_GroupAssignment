@@ -3,8 +3,8 @@
 #ifndef ADMIN_H
 #define ADMIN_H
 
-#include "member.h"
-#include "house.h"
+#include "Member.h"
+#include "House.h"
 #include <iostream>
 #include <vector>
 

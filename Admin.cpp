@@ -1,4 +1,4 @@
-#include "admin.h"
+#include "Admin.h"
 
 // Constructor
 Admin::Admin(string username, string password) {
