@@ -83,6 +83,7 @@ void guestOptions() {
     cout << "1. Register, 2. View Houses\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
+    
     //Guest guest;
     int choice;
     getInput(choice);
