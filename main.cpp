@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 
 //Import files
 #include "Input.h"
@@ -24,7 +25,10 @@ void guestOptions();
 void memberOptions();
 void adminOptions();
 void loginInput(string *username, string *password);
+
 bool isLoggedIn(string username, string password);
+bool strto_bool(string str);
+
 string toLowercase(string str);
 
 void mainMenu() {
@@ -58,7 +62,7 @@ void mainMenu() {
             cout << "THANK YOU FOR USING OUR PROGRAM";
             exit(0);
         default:
-            cout << "Invalid Choice. Please Enter again: ";
+            cout << "Invalid Choice. Enter again: ";
             getInput(choice);
         }
     }
@@ -121,7 +125,7 @@ void guestOptions() {
             loop = 0;
             break;
         default:
-            cout << "Invalid Choice. Please Enter again: ";
+            cout << "Invalid Choice. Enter again: ";
             getInput(choice);
         }
     }
@@ -134,11 +138,25 @@ void memberOptions() {
     system("cls");
     cin.ignore();
 
-    while(1) {
+    bool loop = 1;
+    while(loop) {
         loginInput(&username, &password);
-
         if(!isLoggedIn(username, password)) {
-            cout << "Wrong password or username!!!\n\n"; 
+            cout << "Wrong password or username!!!\n";
+            cout << "Return to main menu? (Y/N): ";
+            char choice;
+            switch(getInput(choice)){
+                case 'Y': case 'y':
+                    mainMenu();
+                    loop = 0;
+                    break;
+                case 'N': case 'n':
+                    cin.ignore();
+                    break;
+                default:
+                    cout << "Invalid Choice. Enter again: ";
+                    getInput(choice);
+            }
         }
         else {
             break;
@@ -152,27 +170,32 @@ void memberOptions() {
     //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
     cout << "1. View Information\n";
-    cout << "2. View Houses\n";
-    cout << "3. Search Houses\n";
-    cout << "4. Request House\n";
-    cout << "5. View Requests\n";
-    cout << "6. Rating\n";
+    cout << "2. Add House\n";
+    cout << "3. List/Unlist House\n";
+    cout << "4. Search Houses\n";
+    cout << "5. Request House\n";
+    cout << "6. View Requests\n";
+    cout << "7. Rating\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
     int choice;
     switch(getInput(choice)){
-    case 1:
+    case 1: //View Info
         cout << member->showInfo();
         break;
-    case 2:
+    case 2: //Add Houses
+        
         break;
-    case 3:
+    case 3: //List/Unlist Houses
+        //Member::list();
         break;
-    case 4:
+    case 4: //Search Houses
         break;
-    case 5:
+    case 5: //Request
         break;
-    case 6:
+    case 6: //View requests
+        break;
+    case 7: //Rating
         break;
     case 0:
         system("cls");
@@ -216,7 +239,6 @@ bool isLoggedIn(string username, string password) {
 
     //Convert username to lowercase
     username = toLowercase(username);
-    cout << username;
 
     //Read file function for below code
     u = "username";
@@ -240,7 +262,45 @@ string toLowercase(string str) {
     return str;
 }
 
+void readFile() {
+
+    std::ifstream myFile("house.txt");
+
+    string owner, location, description, rating, review, status;
+    bool availability;
+
+    string line;
+
+    while(std::getline(myFile, line)) {
+        std::stringstream ss(line);
+        std::getline(ss, owner, ',');
+        std::getline(ss, location, ',');
+        std::getline(ss, description, ',');
+        std::getline(ss, rating, ',');
+        std::getline(ss, review, ',');
+        ss >> availability;
+        //availability = strto_bool(status);
+        cout << owner << " " << location << " " << description << " ";
+        cout << rating << " " << review << " " << availability << std::endl;
+        if(availability) {
+            cout << "True" << std::endl;
+        }
+        else {
+            cout << "False" << std::endl;
+        }
+    }
+    myFile.close();
+}
+
+bool strto_bool(string str) {
+    if(str.compare("1")) {
+        return 1;
+    }
+    return 0;
+}
+
 int main() {
+    system("cls");
     cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
     cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
     cout << "\nInstructor: Mr. Linh Tran\n";
@@ -250,5 +310,6 @@ int main() {
     cout << "s3515639, Quyen Nguyen\n";
     cout << "s3927196, Duy Hoang\n";
     mainMenu();
+    //readFile();
     return 0;
 }

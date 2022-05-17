@@ -1,5 +1,8 @@
 #include "Member.h"
 #include <iostream>
+#include <string.h>
+#include <fstream>
+#include <sstream>
 
 
 Member::Member(std::string name, std::string pass) {
@@ -15,10 +18,33 @@ std::string Member::getphoneNo() {
     return this->phoneNo;
 }
 
-void list(House myHouse) {}
-void unlist(House myHouse) {}
-void request() {}
-void viewRequests() {}
+//Functions
+
+void Member::addHouse() {
+    //user1, location1, descript1, rating1, review1, 0
+    string location, description, rating = "", review = "", availability = 0;
+    string str;
+    std::ofstream myFile;
+
+    std::cout << "Enter location: ";
+    std::getline(std::cin, location);
+
+    std::cout << "Enter description: ";
+    std::getline(std::cin, description);
+
+    str = this->username + ", " + location + ", " + description + ", " + rating + ", " + review + ", " + availability;
+
+    myFile.open("house.txt", std::ios::app);
+    if(myFile.is_open()) {
+        myFile << str << "\n";
+        myFile.close();
+    }
+}
+
+void Member::list(House myHouse) {}
+void Member::unlist(House myHouse) {}
+void Member::request() {}
+void Member::viewRequests() {}
 
 //Setters
 void Member::setName(std::string fullname) {

@@ -12,7 +12,7 @@ T getInput(T& input) {
     while(std::cin.fail()) {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-        std::cout << "Invalid Input. Please enter again: ";
+        std::cout << "Invalid Input. Enter again: ";
         std::cin >> input;
     }
     return input;

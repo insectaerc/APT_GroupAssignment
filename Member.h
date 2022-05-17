@@ -22,6 +22,7 @@ public:
     Member(std::string username, std::string password);
 
     //Functions
+    void addHouse();
     void list(House myHouse);
     void unlist(House myHouse);
     void request();
