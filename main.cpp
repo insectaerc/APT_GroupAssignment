@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
+#include <fstream>
 
 //Import files
 #include "Input.h"
