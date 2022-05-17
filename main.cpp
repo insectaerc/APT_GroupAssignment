@@ -28,7 +28,6 @@ bool isLoggedIn(string username, string password);
 void adminOptions();
 
 void mainMenu() {
-    system("cls");
 
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -104,6 +103,7 @@ void guestOptions() {
             cout << "\nRegister Succesfully!!!\n";
             cout << "Press Enter to return to main menu....";
             cin.ignore();
+            system("cls");
             mainMenu();
             loop = 0;
             break;
@@ -114,6 +114,7 @@ void guestOptions() {
             break;
         case 0:
             //Return to Main menu
+            system("cls");
             mainMenu();
             loop = 0;
             break;
@@ -172,6 +173,7 @@ void memberOptions() {
     case 6:
         break;
     case 0:
+        system("cls");
         mainMenu();
         break;
     default:
