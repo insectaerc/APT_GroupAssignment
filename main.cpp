@@ -24,6 +24,7 @@ class System{
     public:
         bool isLoggedIn;
         std::vector<Member*> members;
+        std::vector<House*> houses;
         System(){};
 };
 
@@ -273,7 +274,9 @@ void loadData(System &appSystem){
     std::string tempStr;
     std::string className;
     std::string username, password, fullname, phoneNumber;
+    std::string houseOwner, location, description;
     int numOfMemberValue = 0;
+    int numOfHouseValue = 0;
     while(getline(myFile, tempStr, '|')){
         if(tempStr == "Member"){
             className = "Member";
@@ -296,7 +299,19 @@ void loadData(System &appSystem){
                 continue;
             };
         }else if (className == "House"){
-            //std::cout << tempStr;
+            numOfHouseValue++;
+            std::cout << numOfHouseValue;
+            if(numOfHouseValue == 1){houseOwner = tempStr; continue;};
+            if(numOfHouseValue == 2){location = tempStr; continue;};
+            if(numOfHouseValue == 3){
+                std::cout << "fasdfasd";
+                description = tempStr;
+                House *house = new House(houseOwner, location, description);
+                appSystem.houses.push_back(house);
+                std::cout << appSystem.houses.size();
+                numOfHouseValue = 0;
+                continue;
+            };
         }
     }
     myFile.close();
@@ -315,6 +330,9 @@ int main() {
     System appSystem; //Initialize an instance to manage the whole system later
     loadData(appSystem);
     for(Member *each : appSystem.members){
+        each->showInfo();
+    }
+    for(House *each : appSystem.houses){
         each->showInfo();
     }
     //mainMenu(appSystem);
