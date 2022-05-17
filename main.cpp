@@ -163,9 +163,9 @@ void memberOptions() {
         }
     }
 
-    Member* member = new Member(username, password);
-    member->setName("Quan");
-    member->setphoneNo("032164564654");
+    Member member(username, password);
+    member.setName("Quan");
+    member.setphoneNo("032164564654");
   
     //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
@@ -181,10 +181,10 @@ void memberOptions() {
     int choice;
     switch(getInput(choice)){
     case 1: //View Info
-        cout << member->showInfo();
+        cout << member.showInfo();
         break;
     case 2: //Add Houses
-        
+        member.addHouse();
         break;
     case 3: //List/Unlist Houses
         //Member::list();
