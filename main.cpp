@@ -128,7 +128,18 @@ void memberOptions() {
   
     system("cls");
     cin.ignore();
-    loginInput(&username, &password);
+
+    
+    while(1) {
+        loginInput(&username, &password);
+
+        if(!isLoggedIn(username, password)) {
+            cout << "Wrong password or username!!!\n\n";
+        }
+        else {
+            break;
+        }
+    }
 
     Member* member = new Member(username, password);
     member->setName("Quan");
@@ -144,6 +155,7 @@ void memberOptions() {
     cout << "6. Rating\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
+    
     int choice;
     switch(getInput(choice)){
     case 1:
@@ -193,6 +205,34 @@ void loginInput(string *u, string *p) {
             break;
         }
     }
+}
+
+bool isLoggedIn(string username, string password) {
+    string u, p; //Correct username and password
+
+    //Convert username to lowercase
+    username = toLowercase(username);
+
+    //Read file function for below code
+    u = "username";
+    p = "123456789";
+
+    //Validation
+    if(username == u && password == p) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+string toLowercase(string str) {
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = str[i] + 32;
+        }
+    }
+    return str;
 }
 
 int main() {
