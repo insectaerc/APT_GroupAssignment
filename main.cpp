@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
+#include <fstream>
 
 //Import files
 #include "Input.h"
@@ -25,16 +26,33 @@ void guestOptions();
 void memberOptions();
 void adminOptions();
 
+void guestRegister(){
+    system("cls");
+    cin.ignore();
+
+    string username, pwd, fullname, phoneNo;
+    cout << "Enter your username: ";
+    std::getline(cin, username);
+    cout << "Enter your password: ";
+    std::getline(cin, pwd);
+    cout << "Enter your fullname: ";
+    std::getline(cin, fullname);
+    cout << "Enter your phone number: ";
+    std::getline(cin, phoneNo);
+    
+    std::string str = username + "," + pwd + "," + fullname + "," + phoneNo;
+    std::fstream myFile;
+    myFile.open("member.txt", std::ios::app);
+    if(myFile.is_open()){
+        myFile << "\n" << str;
+        myFile.close();
+    }
+    cout << "Register Successfully!";
+    mainMenu();
+}
+
 void mainMenu() {
     system("cls");
-    cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
-    cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
-    cout << "\nInstructor: Mr. Linh Tran\n";
-    cout << "Group: Group 29\n";
-    cout << "s3928992, Quan Tran\n";
-    cout << "s3695412, Hoang Ninh\n";
-    cout << "s3515639, Quyen Nguyen\n";
-    cout << "s3927196, Duy Hoang\n";
 
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -80,7 +98,8 @@ void guestOptions() {
     
     system("cls");
     cout << "***** GUEST MENU *****\n\n";
-    cout << "1. Register, 2. View Houses\n";
+    cout << "1. Register\n"; 
+    cout << "2. View Houses\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
     //Guest guest;
@@ -90,19 +109,21 @@ void guestOptions() {
     while(loop) {
         switch(choice){
         case 1:
-            //Register Menu
-            system("cls");
-            cin.ignore();
-            cout << "Enter your full name: ";
-            std::getline(cin, fullname);
-            cout << "Enter your phone Number: ";
-            std::getline(cin, phoneNo);
-            loginInput(&username, &password);
+            // //Register Menu
+            // system("cls");
+            // cin.ignore();
+            // cout << "Enter your full name: ";
+            // std::getline(cin, fullname);
+            // cout << "Enter your phone Number: ";
+            // std::getline(cin, phoneNo);
+            // loginInput(&username, &password);
 
-            //guest.createAcc();
-            cout << "\nRegister Succesfully!!!\n";
-            loop = 0;
-            break;
+            // //guest.createAcc();
+            // cout << "\nRegister Succesfully!!!\n";
+            // loop = 0;
+            // break;
+
+            guestRegister();
         case 2:
             //View House Menu
             //guest.viewHouses();
@@ -195,6 +216,14 @@ void loginInput(string *u, string *p) {
 }
 
 int main() {
+    cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
+    cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
+    cout << "\nInstructor: Mr. Linh Tran\n";
+    cout << "Group: Group 29\n";
+    cout << "s3928992, Quan Tran\n";
+    cout << "s3695412, Hoang Ninh\n";
+    cout << "s3515639, Quyen Nguyen\n";
+    cout << "s3927196, Duy Hoang\n";
     mainMenu();
     return 0;
 }
