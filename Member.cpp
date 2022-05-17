@@ -1,35 +1,42 @@
 #include "Member.h"
 #include <iostream>
 
-using std::cout;
-using std::string;
 
-//Constructor
-Member::Member(string username, string password): 
-    username(username), password(password) {}
+Member::Member(std::string name, std::string pass) {
+    this->username = name;
+    this->password = pass;
+}
 
-//Functions
-void list(House myHouse);
-void unlist(House myHouse);
-void request();
-void viewRequests();
-
-//Getters
-string Member::getName() {
+std::string Member::getName() {
     return this->fullname;
 }
-string Member::getphoneNo() {
+
+std::string Member::getphoneNo() {
     return this->phoneNo;
 }
-void getHouse();
-void getReview();
-void getRating();
-void getCreditPts();
-void getocuppyingHouse();
 
-//showInfo
-string Member::showInfo() {
-    string str;
-    str = "Full Name: " + getName() + ", Phone Number: " + getphoneNo();
-    return str;
+void list(House myHouse) {}
+void unlist(House myHouse) {}
+void request() {}
+void viewRequests() {}
+
+//Setters
+void Member::setName(std::string fullname) {
+    this->fullname = fullname;
+}
+
+void Member::setphoneNo(std::string phoneNo) {
+    this->phoneNo = phoneNo;
+}
+
+//Getters
+
+void getHouse() {}
+void getReview() {}
+void getRating() {}
+void getCreditPts() {}
+void getocuppyingHouse() {}
+
+std::string Member::showInfo() {
+    return ("Full Name: " + this->fullname + ", Phone No: " + this->phoneNo);
 }

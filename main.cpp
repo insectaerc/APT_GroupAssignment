@@ -21,15 +21,12 @@ using std::endl;
 
 void mainMenu();
 void loginInput(string *u, string *p);
-void registr();
-void viewMember();
 void guestOptions();
 void memberOptions();
 void adminOptions();
-void exit();
 
 void mainMenu() {
-    system("clear");
+    system("cls");
     cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
     cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
     cout << "\nInstructor: Mr. Linh Tran\n";
@@ -42,7 +39,7 @@ void mainMenu() {
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
     cout << "0. EXIT\n";
-    cout << "Enter your choice: ";
+    cout << "\nEnter your choice: ";
     bool loop = 1;
     int choice;
     getInput(choice);
@@ -72,20 +69,20 @@ void mainMenu() {
             getInput(choice);
         }
     }
+    cout << endl;
 }
 
 void guestOptions() {
     string username;
-    string *u = &username;
-    
     string password;
-    string *p = &password;
+    string fullname;
+    string phoneNo = "";
     
-    system("clear");
+    system("cls");
     cout << "***** GUEST MENU *****\n\n";
     cout << "1. Register, 2. View Houses\n";
     cout << "0. Return to Main menu\n";
-    cout << "Enter your choice: ";
+    cout << "\nEnter your choice: ";
     //Guest guest;
     int choice;
     getInput(choice);
@@ -94,10 +91,14 @@ void guestOptions() {
         switch(choice){
         case 1:
             //Register Menu
-            system("clear");
+            system("cls");
             cin.ignore();
-            loginInput(u, p);
-            cout << username << " " << password;
+            cout << "Enter your full name: ";
+            std::getline(cin, fullname);
+            cout << "Enter your phone Number: ";
+            std::getline(cin, phoneNo);
+            loginInput(&username, &password);
+
             //guest.createAcc();
             cout << "\nRegister Succesfully!!!\n";
             loop = 0;
@@ -122,21 +123,17 @@ void guestOptions() {
 void memberOptions() {
     //Declare pointer for username and password
     string username;
-    string *u = &username;
-    
     string password;
-    string *p = &password;
-
   
-    system("clear");
+    system("cls");
     cin.ignore();
-    loginInput(u, p);
+    loginInput(&username, &password);
 
-    Member member(username, password);
-
+    Member* member = new Member(username, password);
+    member->setName("Quan");
+    member->setphoneNo("032164564654");
   
-  
-    system("clear");
+    //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
     cout << "1. View Information\n";
     cout << "2. View Houses\n";
@@ -145,11 +142,11 @@ void memberOptions() {
     cout << "5. View Requests\n";
     cout << "6. Rating\n";
     cout << "0. Return to Main menu\n";
-    cout << "Enter your choice: ";
+    cout << "\nEnter your choice: ";
     int choice;
     switch(getInput(choice)){
     case 1:
-        member.showInfo();
+        cout << member->showInfo();
         break;
     case 2:
         break;
@@ -178,7 +175,7 @@ void loginInput(string *u, string *p) {
         cout << "Enter username: ";
         std::getline(cin, *u);
         if(u->length() > 0) {
-        break;
+            break;
         }
         cout << "No Username entered!!!\n";
     }
@@ -186,16 +183,15 @@ void loginInput(string *u, string *p) {
         cout << "Enter password: ";
         std::getline(cin, *p);
         if(p->length() > MAXPASSLENGTH) {
-        cout << "Your password is too long\n";
+            cout << "Your password is too long\n";
         }
         else if(p->length() == 0) {
-        cout << "\nNo Password entered!!!\n";
+            cout << "\nNo Password entered!!!\n";
         }
         else {
-        break;
+            break;
         }
     }
-    cout << endl;
 }
 
 int main() {

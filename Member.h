@@ -1,26 +1,25 @@
 #pragma once
 
-#ifndef MEMBER_H
-#define MEMBER_H
+// #ifndef MEMBER_H
+// #define MEMBER_H
 
 #include "House.h"
 #include <iostream>
 
 class Member {
 private:
-    string username;
-    string password;
-    string fullname;
-    string phoneNo;
+    std::string username;
+    std::string password;
+    std::string fullname;
+    std::string phoneNo;
     House myHouse;
-    string review;
+    std::string review;
     int rating;
     int creditPoints;
     House ocuppyingHouse;
 public:
     //Constructor
-    Member();
-    Member(string username, string password);
+    Member(std::string username, std::string password);
 
     //Functions
     void list(House myHouse);
@@ -28,16 +27,21 @@ public:
     void request();
     void viewRequests();
 
+    //Setters
+
+    void setName(std::string name);
+    void setphoneNo(std::string phoneNo);
+
     //Getters
-    string getName();
-    string getphoneNo();
+    std::string getName();
+    std::string getphoneNo();
     void getHouse();
     void getReview();
     void getRating();
     void getCreditPts();
     void getocuppyingHouse();
 
-    string showInfo();
+    std::string showInfo();
 };
 
-#endif
+//#endif
