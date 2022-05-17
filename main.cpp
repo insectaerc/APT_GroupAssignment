@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
-#include <cctype>
 #include <fstream>
 
 //Import files
@@ -21,11 +20,12 @@ using std::cout;
 using std::cin;
 
 void mainMenu();
-void loginInput(string *username, string *password);
 void guestOptions();
 void memberOptions();
-bool isLoggedIn(string username, string password);
 void adminOptions();
+void loginInput(string *username, string *password);
+bool isLoggedIn(string username, string password);
+string toLowercase(string str);
 
 void mainMenu() {
 
@@ -90,9 +90,11 @@ void guestOptions() {
             std::getline(cin, phoneNo);
             loginInput(&username, &password);
 
-            str = username + ", " + password + ", " + fullname + ", " + phoneNo;
+            //Convert username to lowercase
+            username = toLowercase(username);
 
-            //guest.createAcc();
+            //Save info to file
+            str = username + ", " + password + ", " + fullname + ", " + phoneNo;
 
             myFile.open("member.txt", std::ios::app);
             if(myFile.is_open()){
@@ -213,12 +215,11 @@ bool isLoggedIn(string username, string password) {
     string u, p; //Correct username and password
 
     //Convert username to lowercase
-    for(int i = 0; i < username.length(); i++) {
-        username[i] = tolower(username[i]);
-    }
+    username = toLowercase(username);
+    cout << username;
 
     //Read file function for below code
-    u = "Username";
+    u = "username";
     p = "123456789";
 
     //Validation
@@ -228,6 +229,15 @@ bool isLoggedIn(string username, string password) {
     else {
         return false;
     }
+}
+
+string toLowercase(string str) {
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = str[i] + 32;
+        }
+    }
+    return str;
 }
 
 int main() {
