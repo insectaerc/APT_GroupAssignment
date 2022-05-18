@@ -68,6 +68,12 @@ void Member::setPassword(std::string password){
 };
 
 //Getters
+std::string Member::getUsername() {
+    return this->username;
+}
+std::string Member::getPassword() {
+    return this->password;
+}
 
 void getHouse() {}
 void getReview() {}

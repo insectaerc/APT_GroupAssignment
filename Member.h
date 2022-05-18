@@ -40,6 +40,8 @@ public:
     //Getters
     std::string getName();
     std::string getphoneNo();
+    std::string getUsername();
+    std::string getPassword();
     void getHouse();
     void getReview();
     void getRating();

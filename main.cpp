@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 //Import files
@@ -28,6 +29,7 @@ class System{
         System(){};
 };
 
+void saveData(System appSystem);
 void loadData(System &appSystem);
 void mainMenu(System appSystem);
 void guestOptions(System appSystem);
@@ -41,6 +43,8 @@ bool strto_bool(string str);
 string toLowercase(string str);
 
 void mainMenu(System appSystem) {
+    //Load Data
+    loadData(appSystem);
 
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -103,11 +107,7 @@ void guestOptions(System appSystem) {
             std::getline(cin, fullname);
             cout << "Enter your phone Number: ";
             std::getline(cin, phoneNo);
-            //loginInput(&username, &password);
-            cout << "Enter your username: ";
-            std::getline(cin, username);
-            cout << "Enter your password: ";
-            std::getline(cin, password);
+            loginInput(&username, &password);
 
             //Convert username to lowercase
             username = toLowercase(username);
@@ -162,12 +162,14 @@ void memberOptions(System appSystem) {
     string username, password;
   
     system("cls");
-    //cin.ignore();
+    cin.ignore();
 
-    while(1) {
-        if(appSystem.isLoggedIn=true){
-            break;
-        }
+    bool loop = 1;
+    while(loop) {
+        // if(appSystem.isLoggedIn=true){
+        //     loop = 0;
+        //     break;
+        // }
         loginInput(&username, &password);
         if(!isLoggedIn(username, password)) {
             cout << "Wrong password or username!!!\n";
@@ -175,7 +177,7 @@ void memberOptions(System appSystem) {
             char choice;
             switch(getInput(choice)){
                 case 'Y': case 'y':
-                    mainMenu();
+                    mainMenu(appSystem);
                     loop = 0;
                     break;
                 case 'N': case 'n':
@@ -192,6 +194,7 @@ void memberOptions(System appSystem) {
     }
 
     Member* member = appSystem.members.back();
+    member->showInfo();
   
     //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
@@ -324,6 +327,32 @@ bool strto_bool(string str) {
     return 0;
 }
 
+void saveData(System appSystem) {
+    //std::ifstream myFile;
+    std::ofstream newFile;
+    //myFile.open("data.txt", std::ios::in);
+    newFile.open("data.txt", std::ios::out);
+
+    std::vector<Member*> members;
+    std::vector<House*> houses;
+
+    members = appSystem.members;
+    houses = appSystem.houses;
+    newFile << "Member|";
+    
+    for(int i = 0; i < members.size(); i++) {
+        newFile << members[i]->getUsername() << "|" << members[i]->getPassword() << "|";
+        newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
+    }
+
+    newFile << "\nHouse|";
+
+    for(int i = 0; i < houses.size(); i++) {
+        newFile << houses[i]->owner << "|" << houses[i]->location << "|" << houses[i]->description << "|";
+    }
+    newFile.close();
+}
+
 void loadData(System &appSystem){
     std::fstream myFile;
     myFile.open("data.txt", std::ios::in);
@@ -356,7 +385,7 @@ void loadData(System &appSystem){
             };
         }else if (className == "House"){
             numOfHouseValue++;
-            std::cout << "Num of house value: " << numOfHouseValue << std::endl;
+            //std::cout << "Num of house value: " << numOfHouseValue << std::endl;
             if(numOfHouseValue == 1){houseOwner = tempStr; continue;};
             if(numOfHouseValue == 2){location = tempStr; continue;};
             if(numOfHouseValue == 3){
@@ -364,7 +393,7 @@ void loadData(System &appSystem){
                 description = tempStr;
                 House *house = new House(houseOwner, location, description);
                 appSystem.houses.push_back(house);
-                std::cout << "House size: " << appSystem.houses.size() << std::endl;
+                //std::cout << "House size: " << appSystem.houses.size() << std::endl;
                 numOfHouseValue = 0;
                 continue;
             };
@@ -375,26 +404,30 @@ void loadData(System &appSystem){
 
 int main() {
     system("cls");
-    cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
-    cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
-    cout << "\nInstructor: Mr. Linh Tran\n";
-    cout << "Group: Group 29\n";
-    cout << "s3928992, Quan Tran\n";
-    cout << "s3695412, Hoang Ninh\n";
-    cout << "s3515639, Quyen Nguyen\n";
-    cout << "s3927196, Duy Hoang\n";
-
-    //mainMenu();
-    //readFile();
+    // cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
+    // cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
+    // cout << "\nInstructor: Mr. Linh Tran\n";
+    // cout << "Group: Group 29\n";
+    // cout << "s3928992, Quan Tran\n";
+    // cout << "s3695412, Hoang Ninh\n";
+    // cout << "s3515639, Quyen Nguyen\n";
+    // cout << "s3927196, Duy Hoang\n";
 
     System appSystem; //Initialize an instance to manage the whole system later
+
+    //mainMenu(appSystem);
     loadData(appSystem);
-    for(Member *each : appSystem.members){
-        each->showInfo();
-    }
-    for(House *each : appSystem.houses){
-        each->showInfo();
-    }
+    saveData(appSystem);
+    //readFile();
+
+    // loadData(appSystem);
+    // for(Member *each : appSystem.members){
+    //     each->showInfo();
+    // }
+    // for(House *each : appSystem.houses){
+    //     each->showInfo();
+    // }
+
     //mainMenu(appSystem);
     return 0;
 }
