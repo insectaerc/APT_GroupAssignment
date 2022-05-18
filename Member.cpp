@@ -3,8 +3,9 @@
 #include <string.h>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
-Member::Member(){}
+Member::Member() {}
 Member::Member(std::string userame, std::string pass) {
     this->username = username;
     this->password = pass;
@@ -47,7 +48,20 @@ std::string Member::getphoneNo() {
 //     }
 // }
 
-void Member::addHouse() {}
+void Member::addHouse(std::vector<House*> *houses, std::string username) {
+    std::string location, description;
+    std::cout << "Enter location: ";
+    getline(std::cin,location);
+    std::cout << "Enter description: ";
+    getline(std::cin,description);
+    House newhouse(username, location, description);
+    houses->push_back(&newhouse);
+    std::cout << "New House Added!!!\n";
+    for(int i = 0; i < houses->size(); i++) {
+        houses->at(i)->showInfo();
+    }
+}
+
 void Member::list(House myHouse) {}
 void Member::unlist(House myHouse) {}
 void Member::request() {}
@@ -87,5 +101,5 @@ void getocuppyingHouse() {}
 
 void Member::showInfo() {
     //return ("Full Name: " + this->fullname + ", Phone No: " + this->phoneNo);
-    std::cout << "Full name:" + this->fullname + ", phone number: " + this->phoneNo + "\n";
+    std::cout << "Full name: " + this->fullname + ", phone number: " + this->phoneNo + "\n";
 }

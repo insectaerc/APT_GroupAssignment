@@ -153,7 +153,7 @@ void System::guestMenu(){
     
     //Create a Member instance
     Member *newMember = new Member();
-    string username, password, fullname, phoneNo, str;
+    string username, password, fullname, phoneNo, tmp;
 
     int choice;
     getInput(choice);
@@ -161,9 +161,8 @@ void System::guestMenu(){
     while(loop) {
         switch(choice){
         case 1: //Register Menu
-            system("cls");
             std::cin.ignore();
-
+            system("cls");
             //Get info from user
             std::cout << "Enter your full name: ";
             std::getline(std::cin, fullname);
@@ -173,7 +172,6 @@ void System::guestMenu(){
 
             //Convert username to lowercase
             username = toLowercase(username);
-            username = "\n" + username;
 
             //Save info to newMember instance
             newMember->setUserName(username);
@@ -195,17 +193,26 @@ void System::guestMenu(){
             // }
 
             std::cout << "\nRegister Succesfully!!!\n";
-            std::cout << "Press Enter to return to main menu....";
+            std::cout << "Press Enter to go to member menu....";
             this->isLoggedInVar = true;
+            for(int i = 0; i < this->members.size(); i++) {
+                tmp = this->members[i]->getUsername();
+                if(tmp.compare(username) == 0) {
+                    this->loggedInMember = members[i];
+                }
+            }
             std::cin.ignore();
             system("cls");
-            std::cin.ignore();
             this->memberMenu();
             loop = 0;
             break;
         case 2:
             //View House Menu
+            system("cls");
             this->showHousesGuest();
+            std::cout << "Press Enter to return to main menu....";
+            std::cin.ignore();
+            this->mainMenu();
             loop = 0;
             break;
         case 0:
@@ -223,7 +230,7 @@ void System::guestMenu(){
 
 void System::memberMenu(){
     //Declare pointer for username and password
-    string username, password;
+    std::string username, password;
   
     system("cls");
 
@@ -236,7 +243,7 @@ void System::memberMenu(){
         loginInput(&username, &password);
         if(this->isLoggedIn(username, password) == false) {
             std::cout << "Wrong password or username!!!\n";
-            std::cout << "Return to main menu? (Y/N): ";
+            std::cout << "Return to Main Menu? (Y/N): ";
             char choice;
             switch(getInput(choice)){
                 case 'Y': case 'y':
@@ -290,7 +297,16 @@ void System::memberMenu(){
         this->memberMenu();
         break;
     case 2: //Add Houses
-        
+        std::cin.ignore();
+        this->loggedInMember->addHouse(&this->houses, username);
+        std::cout << "Option: \n";
+        for(int i = 0; i < houses.size(); i++) {
+            houses[i]->showInfo();
+        }
+        std::cout << "Press Enter to return to member menu....";
+        std::cin.ignore();
+        system("cls");
+        this->memberMenu();
         break;
     case 3: //List/Unlist Houses
         break;
@@ -408,18 +424,22 @@ bool System::isLoggedIn(std::string username, std::string password){
 
     //Convert username to lowercase
     username = toLowercase(username);
+    std::cout << "us: " << username << ", pw: " << password << std::endl;
+    std::cout << "size: " << this->members.size() << std::endl;
 
     //Validation
     for(int i = 0; i < this->members.size(); i++) {
         u = this->members[i]->getUsername();
         p = this->members[i]->getPassword();
+        std::cout << "u: " << u << ", p: " << p << std::endl;
         if(username.compare(u) == 0 && password.compare(p) == 0) {
             return true;
         } 
         else {
-            return false;
+            continue;
         }
     }
+    return false;
 }
 
 
