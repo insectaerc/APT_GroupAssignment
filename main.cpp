@@ -20,6 +20,9 @@ using std::string;
 using std::cout;
 using std::cin;
 
+class System{};
+
+void loadData(System &appSystem);
 void mainMenu();
 void guestOptions();
 void memberOptions();
@@ -295,6 +298,55 @@ bool strto_bool(string str) {
         return 1;
     }
     return 0;
+}
+
+void loadData(System &appSystem){
+    std::fstream myFile;
+    myFile.open("data.txt", std::ios::in);
+    std::string tempStr;
+    std::string className;
+    std::string username, password, fullname, phoneNumber;
+    std::string houseOwner, location, description;
+    int numOfMemberValue = 0;
+    int numOfHouseValue = 0;
+    while(getline(myFile, tempStr, '|')){
+        if(tempStr == "Member"){
+            className = "Member";
+            continue;
+        }else if (tempStr == "\nHouse"){
+            className = "House";
+            continue;
+        }
+        
+        if(className == "Member"){
+            numOfMemberValue++;
+            if(numOfMemberValue == 1){username = tempStr; continue;};
+            if(numOfMemberValue == 2){password = tempStr; continue;};
+            if(numOfMemberValue == 3){fullname = tempStr; continue;};
+            if(numOfMemberValue == 4){
+                phoneNumber = tempStr;
+                Member *member = new Member(username, password, fullname, phoneNumber);
+                appSystem.members.push_back(member);
+                numOfMemberValue = 0;
+                continue;
+            };
+        }else if (className == "House"){
+            numOfHouseValue++;
+            std::cout << "Num of house value: " << numOfHouseValue << std::endl;
+            if(numOfHouseValue == 1){houseOwner = tempStr; continue;};
+            if(numOfHouseValue == 2){location = tempStr; continue;};
+            if(numOfHouseValue == 3){
+                //std::cout << "fasdfasd";
+                description = tempStr;
+                House *house = new House(houseOwner, location, description);
+                appSystem.houses.push_back(house);
+                std::cout << "House size: " << appSystem.houses.size() << std::endl;
+                numOfHouseValue = 0;
+                continue;
+            };
+        }
+    }
+    myFile.close();
 }
 
 int main() {
