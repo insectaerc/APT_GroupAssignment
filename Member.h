@@ -44,8 +44,8 @@ public:
     std::string getPassword();
     void getHouse();
     void getReview();
-    void getRating();
-    void getCreditPts();
+    int getRating();
+    int getCreditPts();
     void getocuppyingHouse();
 
     void showInfo();

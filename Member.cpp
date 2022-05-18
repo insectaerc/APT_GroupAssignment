@@ -74,11 +74,15 @@ std::string Member::getUsername() {
 std::string Member::getPassword() {
     return this->password;
 }
+int Member::getRating() {
+    return this->rating;
+}
+int Member::getCreditPts() {
+    return this->creditPoints;
+}
 
 void getHouse() {}
 void getReview() {}
-void getRating() {}
-void getCreditPts() {}
 void getocuppyingHouse() {}
 
 void Member::showInfo() {

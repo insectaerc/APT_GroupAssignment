@@ -28,9 +28,12 @@ class System{
         void mainMenu();
         void guestMenu();
         void memberMenu();
+        void adminMenu();
         void loginInput(std::string *u, std::string *p);
         bool isLoggedIn(std::string username, std::string password);
         std::string toLowercase(std::string str);
         void showHousesGuest();
         void showHousesMember();
+        void showMembersAdmin();
+        void showHousesAdmin();
 };

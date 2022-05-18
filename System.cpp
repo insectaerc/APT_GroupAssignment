@@ -122,7 +122,7 @@ void System::mainMenu(){
             break;
         case 3:
             //Admin Options Menu
-            std::cout << "Admin option";
+            this->adminMenu();
             loop = 0;
             break;
         case 0:
@@ -294,6 +294,63 @@ void System::memberMenu(){
     }
 }
 
+void System::adminMenu() {
+    system("cls");
+
+    string username, password;
+    int choice;
+
+    bool loop = 1;
+    while(loop) {
+        loginInput(&username, &password);
+        if(this->isLoggedIn(username, password) == false) {
+            std::cout << "Wrong password or username!!!\n";
+            std::cout << "Return to main menu? (Y/N): ";
+            char choice;
+            switch(getInput(choice)){
+                case 'Y': case 'y':
+                    this->mainMenu();
+                    loop = 0;
+                    break;
+                case 'N': case 'n':
+                    std::cin.ignore();
+                    break;
+                default:
+                    std::cout << "Invalid Choice. Enter again: ";
+                    getInput(choice);
+            }
+        } else {
+            break;
+        }
+    }
+
+    std::cout << "***** ADMIN MENU *****\n\n";
+    std::cout << "1. View Members\n";
+    std::cout << "2. View Houses\n";
+    std::cout << "0. Return to Main menu\n";
+    std::cout << "\nEnter your choice: ";
+
+    switch(getInput(choice)){
+    case 1: //View Members information
+        this->showMembersAdmin();
+        break;
+    case 2: //View Houses information
+        this->showHousesAdmin();
+        break;
+    case 0:
+        system("cls");
+        this->mainMenu();
+        break;
+    default:
+        std::cout << "Wrong Input\n";
+        std::cout << "Press ENTER to Continue....\n";
+        std::cin.ignore();
+        std::cin.ignore();
+        this->mainMenu();
+    }
+}
+
+
 void System::loginInput(std::string *u, std::string *p){
     while(1) {
         std::cout << "Enter username: ";
@@ -337,6 +394,7 @@ bool System::isLoggedIn(std::string username, std::string password){
     }
 }
 
+
 std::string System::toLowercase(std::string str){
     for(int i = 0; i < str.length(); i++) {
         if(str[i] >= 'A' && str[i] <= 'Z') {
@@ -370,4 +428,30 @@ void System::showHousesMember(){
         }
         std::cout << std::endl;
     };
+}
+
+
+void System::showMembersAdmin(){
+    std::cout << "\n\nMembers Information:\n";
+    for (Member *eachMember : this->members) {
+        std::cout << "\nUsername: " << eachMember->getUsername()
+                  << "\nFullname: " << eachMember->getName()
+                  << "\nPhone number: " << eachMember->getphoneNo()
+                  << "\nRating: " << eachMember->getRating()
+                  << "\nCredit point: " << eachMember->getCreditPts() << "\n";
+                  //<< "\n House location: " << eachMember->myHouse->location
+                  //<< "\n House description: " << eachMember->myHouse->description << "\n";
+    }
+}
+
+void System::showHousesAdmin(){
+    std::cout << "\n\nHouses Information:\n";
+    for (House *eachHouse : houses) {
+        std::cout << "\nLocation: " << eachHouse->location
+                  << "\nDescription: " << eachHouse->description
+                  //<< "\n Rating: " << house->rating
+                  << "\nOwner: " << eachHouse->owner << "\n";
+                  //<< "\n Review: " << house->review
+                  //<< "\n Availability: " << house->availability << "\n";
+    }
 }
