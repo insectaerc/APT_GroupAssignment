@@ -1,6 +1,6 @@
 complile command:
 g++ main.cpp member.cpp guest.cpp admin.cpp
-if ($?) { g++ main.cpp member.cpp -o main } ; if ($?) { .\main }
+if ($?) { g++ main.cpp member.cpp house.cpp -o main } ; if ($?) { .\main }
 
 class
   Customer
