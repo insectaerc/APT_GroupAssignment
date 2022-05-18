@@ -253,11 +253,18 @@ void System::memberMenu(){
         }
         else {
             this->isLoggedInVar = true;
+            std::string tmp;
+            for(int i = 0; i < this->members.size(); i++) {
+                tmp = this->members[i]->getUsername();
+                if(tmp.compare(username) == 0) {
+                    this->loggedInMember = members[i];
+                }
+            }
             break;
         }
     }
 
-    Member* member = this->members.back();
+    //Member* member = this->members.back();
   
     //system("cls");
     std::cout << "\n***** MEMBER MENU *****\n\n";
@@ -274,21 +281,23 @@ void System::memberMenu(){
     int choice;
     switch(getInput(choice)){
     case 1:
-        member->showInfo();
-        std::cout << "Press Enter to return to main menu....";
+        system("cls");
+        this->loggedInMember->showInfo();
+        std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
         std::cin.ignore();
         system("cls");
         this->memberMenu();
         break;
     case 2: //Add Houses
+        
         break;
     case 3: //List/Unlist Houses
         break;
     case 4:
         system("cls");
         this->showHousesMember();
-        std::cout << "Press Enter to return to main menu....";
+        std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
         std::cin.ignore();
         system("cls");
