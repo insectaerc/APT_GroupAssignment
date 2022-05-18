@@ -13,6 +13,7 @@
 #include "House.h"
 #include "Member.h"
 #include "Guest.h"
+#include "Admin.h"
 
 //DEFINE
 #define MAXPASSLENGTH 20
@@ -36,6 +37,29 @@ class System{
                 << "Description: " << eachHouse->description << "\n";
             }
         };
+
+        void viewMemberAdmin () {
+            for (Member *eachmember : members) {
+                cout << "Member username: " << eachmember->getUsername()
+                     << "\n Fullname: " << eachmember->getName()
+                     << "\n Phone number: " << eachmember->getphoneNo()
+                     << "\n Rating: " << eachmember->getRating()
+                     << "\n Credit point: " << eachmember->getCreditPts() << "\n";
+                     //<< "\n House location: " << eachmember->myHouse->location
+                     //<< "\n House description: " << eachmember->myHouse->description << "\n";
+            }
+        }
+
+        void viewHouseAdmin() {
+            for (House *eachhouse : houses) {
+                cout << "House location: " << eachhouse->location
+                     << "\n Description: " << eachhouse->description
+                     << "\n Rating: " << eachhouse->getRating()
+                     << "\n Owner: " << eachhouse->owner
+                     << "\n Review: " << eachhouse->getReview()
+                     << "\n Availability: " << eachhouse->getAvailability() << "\n";
+            }
+        }
 };
 
 void saveData(System appSystem);
