@@ -20,27 +20,28 @@ std::string Member::getphoneNo() {
 
 //Functions
 
-void Member::addHouse() {
-    //user1, location1, descript1, rating1, review1, 0
-    string location, description, rating = "", review = "", availability = 0;
-    string str;
-    std::ofstream myFile;
+// void Member::addHouse() {
+//     //user1, location1, descript1, rating1, review1, 0
+//     string location, description, rating = "", review = "", availability = 0;
+//     string str;
+//     std::ofstream myFile;
 
-    std::cout << "Enter location: ";
-    std::getline(std::cin, location);
+//     std::cout << "Enter location: ";
+//     std::getline(std::cin, location);
 
-    std::cout << "Enter description: ";
-    std::getline(std::cin, description);
+//     std::cout << "Enter description: ";
+//     std::getline(std::cin, description);
 
-    str = this->username + ", " + location + ", " + description + ", " + rating + ", " + review + ", " + availability;
+//     str = this->username + ", " + location + ", " + description + ", " + rating + ", " + review + ", " + availability;
 
-    myFile.open("house.txt", std::ios::app);
-    if(myFile.is_open()) {
-        myFile << str << "\n";
-        myFile.close();
-    }
-}
+//     myFile.open("house.txt", std::ios::app);
+//     if(myFile.is_open()) {
+//         myFile << str << "\n";
+//         myFile.close();
+//     }
+// }
 
+void Member::addHouse() {}
 void Member::list(House myHouse) {}
 void Member::unlist(House myHouse) {}
 void Member::request() {}

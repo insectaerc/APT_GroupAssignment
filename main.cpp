@@ -6,6 +6,7 @@
 #include <cstring>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 //Import files
 #include "Input.h"
@@ -20,7 +21,13 @@ using std::string;
 using std::cout;
 using std::cin;
 
-class System{};
+class System{
+    public:
+        bool isLoggedIn;
+        std::vector<Member*> members;
+        std::vector<House*> houses;
+        System(){};
+};
 
 void loadData(System &appSystem);
 void mainMenu();
