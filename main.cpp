@@ -81,8 +81,8 @@ void mainMenu(System &appSystem) {
             break;
         case 0:
             //Close App
-            cout << "THANK YOU FOR USING OUR PROGRAM";
             saveData(appSystem);
+            cout << "THANK YOU FOR USING OUR PROGRAM";
             exit(0);
         default:
             cout << "Invalid Choice. Enter again: ";
