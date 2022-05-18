@@ -31,9 +31,9 @@ class System{
 
 void saveData(System appSystem);
 void loadData(System &appSystem);
-void mainMenu(System appSystem);
-void guestOptions(System appSystem);
-void memberOptions(System appSystem);
+void mainMenu(System &appSystem);
+void guestOptions(System &appSystem);
+void memberOptions(System &appSystem);
 void adminOptions();
 void loginInput(string *username, string *password);
 
@@ -42,9 +42,7 @@ bool strto_bool(string str);
 
 string toLowercase(string str);
 
-void mainMenu(System appSystem) {
-    //Load Data
-    loadData(appSystem);
+void mainMenu(System &appSystem) {
 
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -73,6 +71,7 @@ void mainMenu(System appSystem) {
         case 0:
             //Close App
             cout << "THANK YOU FOR USING OUR PROGRAM";
+            saveData(appSystem);
             exit(0);
         default:
             cout << "Invalid Choice. Enter again: ";
@@ -81,7 +80,7 @@ void mainMenu(System appSystem) {
     }
 }
 
-void guestOptions(System appSystem) {
+void guestOptions(System &appSystem) {
     system("cls");
     cout << "***** GUEST MENU *****\n\n";
     cout << "1. Register\n";
@@ -157,7 +156,7 @@ void guestOptions(System appSystem) {
     }
 }
 
-void memberOptions(System appSystem) {
+void memberOptions(System &appSystem) {
     //Declare pointer for username and password
     string username, password;
   
@@ -166,10 +165,10 @@ void memberOptions(System appSystem) {
 
     bool loop = 1;
     while(loop) {
-        // if(appSystem.isLoggedIn=true){
-        //     loop = 0;
-        //     break;
-        // }
+        if(appSystem.isLoggedIn=true){
+            loop = 0;
+            break;
+        }
         loginInput(&username, &password);
         if(!isLoggedIn(username, password)) {
             cout << "Wrong password or username!!!\n";
@@ -194,7 +193,6 @@ void memberOptions(System appSystem) {
     }
 
     Member* member = appSystem.members.back();
-    member->showInfo();
   
     //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
@@ -328,6 +326,8 @@ bool strto_bool(string str) {
 }
 
 void saveData(System appSystem) {
+    cout << "Saving Data...." << std::endl;
+
     //std::ifstream myFile;
     std::ofstream newFile;
     //myFile.open("data.txt", std::ios::in);
@@ -353,7 +353,7 @@ void saveData(System appSystem) {
     newFile.close();
 }
 
-void loadData(System &appSystem){
+void loadData(System &appSystem) {
     std::fstream myFile;
     myFile.open("data.txt", std::ios::in);
     std::string tempStr;
@@ -415,9 +415,8 @@ int main() {
 
     System appSystem; //Initialize an instance to manage the whole system later
 
-    //mainMenu(appSystem);
     loadData(appSystem);
-    saveData(appSystem);
+    mainMenu(appSystem);
     //readFile();
 
     // loadData(appSystem);
