@@ -117,6 +117,8 @@ void System::mainMenu(){
             break;
         case 2:
             //Member Options Menu
+            this->isLoggedInVar = false;
+            std::cin.ignore();
             this->memberMenu();
             loop = 0;
             break;
@@ -193,6 +195,7 @@ void System::guestMenu(){
             this->isLoggedInVar = true;
             std::cin.ignore();
             system("cls");
+            std::cin.ignore();
             this->memberMenu();
             loop = 0;
             break;
@@ -245,6 +248,7 @@ void System::memberMenu(){
             }
         }
         else {
+            this->isLoggedInVar = true;
             break;
         }
     }
@@ -267,13 +271,24 @@ void System::memberMenu(){
     switch(getInput(choice)){
     case 1:
         member->showInfo();
+        std::cout << "Press Enter to return to main menu....";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->memberMenu();
         break;
     case 2: //Add Houses
         break;
     case 3: //List/Unlist Houses
         break;
     case 4:
+        system("cls");
         this->showHousesMember();
+        std::cout << "Press Enter to return to main menu....";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->memberMenu();
         break;
     case 5: //Request
         break;
@@ -324,16 +339,16 @@ bool System::isLoggedIn(std::string username, std::string password){
     //Convert username to lowercase
     username = toLowercase(username);
 
-    //Read file function for below code
-    u = "username";
-    p = "123456789";
-
     //Validation
-    if(username == u && password == p) {
-        return true;
-    }
-    else {
-        return false;
+    for(int i = 0; i < this->members.size(); i++) {
+        u = this->members[i]->getUsername();
+        p = this->members[i]->getPassword();
+        if(username.compare(u) == 0 && password.compare(p) == 0) {
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
 }
 
