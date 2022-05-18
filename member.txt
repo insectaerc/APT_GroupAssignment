@@ -1,5 +1,0 @@
-user1,passw1,trong hoang,0123456789
-user2,passw2,quang liem,0234567981
-user3,passw3,magnus carlsen,0987654123
-user4,passw4,popopo,789789
-user5,passw5,useruser,123123123
