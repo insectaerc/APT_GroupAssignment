@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 //Import files
 #include "Input.h"
@@ -26,6 +27,7 @@ public:
     bool isLoggedIn;
     std::vector<Member*> members;
     std::vector<House*> houses;
+    std::vector<std::string> locations;
     System(){
         this->isLoggedIn = false;
     };
@@ -37,6 +39,23 @@ public:
             std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
             << "Description: " << eachHouse->description << "\n";
         }
+    }
+
+    void showHousesMember(System appSystem){
+        //This assumes that our app only supports Hanoi, Dalat, and Danang cities
+        std::cout << "Suitable houses for you: \n";
+        int order = 1;
+        for(std::string eachLocation : this->locations){
+            std::cout << eachLocation << std::endl;
+            for(int i = 0; i < this->houses.size(); i++){
+                if(eachLocation == this->houses[i]->location){
+                    std::cout << order << ". ";
+                    this->houses[i]->showInfo();
+                    order++;
+                }
+            }
+            std::cout << std::endl;
+        };
     }
 };
 
@@ -226,7 +245,8 @@ void memberOptions(System &appSystem) {
         break;
     case 3: //List/Unlist Houses
         break;
-    case 4: //Search Houses
+    case 4:
+        appSystem.showHousesMember(appSystem);
         break;
     case 5: //Request
         break;
@@ -381,6 +401,8 @@ void loadData(System &appSystem) {
             className = "House";
             continue;
         }
+        //Remove new line character \n from tempStr
+        tempStr.erase(remove(tempStr.begin(), tempStr.end(), '\n'), tempStr.end());
         
         if(className == "Member"){
             numOfMemberValue++;
@@ -396,9 +418,26 @@ void loadData(System &appSystem) {
             };
         }else if (className == "House"){
             numOfHouseValue++;
-            //std::cout << "Num of house value: " << numOfHouseValue << std::endl;
             if(numOfHouseValue == 1){houseOwner = tempStr; continue;};
-            if(numOfHouseValue == 2){location = tempStr; continue;};
+            if(numOfHouseValue == 2){
+                //Save locations to system for later use of showing members houses based on locations
+                location = tempStr;
+                if(appSystem.locations.size() == 0){
+                    appSystem.locations.push_back(location);
+                }
+                bool locationAlreadySaved = false;       //Save decision is based on this variable
+                for(std::string eachLocation : appSystem.locations){ //With each location, we'll loop through the locations list, and compare
+                    if(location == eachLocation){   // If location is found, no save
+                        locationAlreadySaved = true;
+                        break;
+                    }else{
+                        continue;  //Else, go to the next location of the locations list to check
+                    }
+                }
+                if(locationAlreadySaved == false){ //At the end of the loop, if no location is found being similar, save
+                    appSystem.locations.push_back(location);
+                }
+            };
             if(numOfHouseValue == 3){
                 //std::cout << "fasdfasd";
                 description = tempStr;
@@ -414,7 +453,7 @@ void loadData(System &appSystem) {
 }
 
 int main() {
-    system("cls");
+    //system("cls");
     // cout << "\nEEET2482/COSC2082 ASSIGNMENT\n";
     // cout << "VACATION HOUSE EXCHANGE APPLICATION\n";
     // cout << "\nInstructor: Mr. Linh Tran\n";
@@ -425,19 +464,8 @@ int main() {
     // cout << "s3927196, Duy Hoang\n";
 
     System appSystem; //Initialize an instance to manage the whole system later
-
     loadData(appSystem);
     mainMenu(appSystem);
-    //readFile();
 
-    // loadData(appSystem);
-    // for(Member *each : appSystem.members){
-    //     each->showInfo();
-    // }
-    // for(House *each : appSystem.houses){
-    //     each->showInfo();
-    // }
-
-    mainMenu(appSystem);
     return 0;
 }
