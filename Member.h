@@ -19,7 +19,7 @@ private:
     House ocuppyingHouse;
 public:
     //Constructor
-    Member(std::string username, std::string password);
+    Member(std::string username, std::string password, std::string fullname, std::string phoneNo);
 
     //Functions
     void addHouse();

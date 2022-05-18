@@ -332,7 +332,7 @@ void loadData(System &appSystem){
             if(numOfMemberValue == 3){fullname = tempStr; continue;};
             if(numOfMemberValue == 4){
                 phoneNumber = tempStr;
-                Member *member = new Member(username, password, fullname, phoneNumber);
+                Member* member = new Member(username, password, fullname, phoneNumber);
                 appSystem.members.push_back(member);
                 numOfMemberValue = 0;
                 continue;

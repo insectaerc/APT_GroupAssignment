@@ -4,13 +4,19 @@
 #include <iostream>
 using std::string;
 
-typedef struct{
-    double rating;
-    string owner;
-    string location;
-    string description;
-    string review;
-    bool availability;
-} House;
+class House{
+    private:
+        double rating;
+        string review;
+        bool availability;
+    public:
+        string owner;
+        string location;
+        string description;
+        House();
+        House(std::string owner, std::string location, std::string description);
+
+        void showInfo();
+};
 
 #endif

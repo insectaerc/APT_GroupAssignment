@@ -5,9 +5,11 @@
 #include <sstream>
 
 
-Member::Member(std::string name, std::string pass) {
+Member::Member(std::string name, std::string pass, std::string fullname, std::string phoneNo) {
     this->username = name;
     this->password = pass;
+    this->fullname = fullname;
+    this->phoneNo = phoneNo;
 }
 
 std::string Member::getName() {
