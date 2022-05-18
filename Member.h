@@ -19,7 +19,9 @@ private:
     House ocuppyingHouse;
 public:
     //Constructor
-    Member(std::string username, std::string password, std::string fullname, std::string phoneNo);
+    Member();
+    Member(std::string username, std::string password);
+    Member(std::string username, std::string password, std::string fullname, std::string phoneNumber);
 
     //Functions
     void addHouse();
@@ -32,6 +34,8 @@ public:
 
     void setName(std::string name);
     void setphoneNo(std::string phoneNo);
+    void setUserName(std::string username);
+    void setPassword(std::string password);
 
     //Getters
     std::string getName();
@@ -42,7 +46,7 @@ public:
     void getCreditPts();
     void getocuppyingHouse();
 
-    std::string showInfo();
+    void showInfo();
 };
 
 //#endif

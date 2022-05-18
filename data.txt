@@ -1,0 +1,9 @@
+Member|
+username1|pwd1|name1|phone1|
+username2|pwd2|name2|phone2|
+username3|pwd3|name3|phone3|
+username4|pwd4|name4|phone4|
+House|
+username1|location1|description1|
+username2|location2|description2|
+username3|location3|description3|

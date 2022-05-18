@@ -5,7 +5,6 @@
 #include <string.h>
 #include <cstring>
 #include <fstream>
-#include <sstream>
 #include <vector>
 
 //Import files
@@ -30,9 +29,9 @@ class System{
 };
 
 void loadData(System &appSystem);
-void mainMenu();
-void guestOptions();
-void memberOptions();
+void mainMenu(System appSystem);
+void guestOptions(System appSystem);
+void memberOptions(System appSystem);
 void adminOptions();
 void loginInput(string *username, string *password);
 
@@ -41,7 +40,7 @@ bool strto_bool(string str);
 
 string toLowercase(string str);
 
-void mainMenu() {
+void mainMenu(System appSystem) {
 
     //Show Options
     cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -54,12 +53,12 @@ void mainMenu() {
         switch(choice){
         case 1:
             //Guest Options Menu
-            guestOptions();
+            guestOptions(appSystem);
             loop = 0;
             break;
         case 2:
             //Member Options Menu
-            memberOptions();
+            memberOptions(appSystem);
             loop = 0;
             break;
         case 3:
@@ -78,49 +77,66 @@ void mainMenu() {
     }
 }
 
-void guestOptions() {
-    string username, password, fullname, phoneNo, str;
-    std::ofstream myFile;
-    
+void guestOptions(System appSystem) {
     system("cls");
     cout << "***** GUEST MENU *****\n\n";
-    cout << "1. Register, 2. View Houses\n";
+    cout << "1. Register\n";
+    cout << "2. View Houses\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
+    
+    //Create a Member instance
+    Member *newMember = new Member();
+    string username, password, fullname, phoneNo, str;
 
-    //Guest guest;
     int choice;
     getInput(choice);
     bool loop = 1;
     while(loop) {
         switch(choice){
-        case 1:
-            //Register Menu
+        case 1: //Register Menu
             system("cls");
             cin.ignore();
+
+            //Get info from user
             cout << "Enter your full name: ";
             std::getline(cin, fullname);
             cout << "Enter your phone Number: ";
             std::getline(cin, phoneNo);
-            loginInput(&username, &password);
+            //loginInput(&username, &password);
+            cout << "Enter your username: ";
+            std::getline(cin, username);
+            cout << "Enter your password: ";
+            std::getline(cin, password);
 
             //Convert username to lowercase
             username = toLowercase(username);
 
-            //Save info to file
-            str = username + ", " + password + ", " + fullname + ", " + phoneNo;
+            //Save info to newMember instance
+            newMember->setUserName(username);
+            newMember->setPassword(password);
+            newMember->setName(fullname);
+            newMember->setphoneNo(phoneNo);
 
-            myFile.open("member.txt", std::ios::app);
-            if(myFile.is_open()){
-                myFile << "\n" << str;
-                myFile.close();
-            }
+            appSystem.members.push_back(newMember);
+            //std::cout << appSystem.members.size();
+            //newMember->showInfo();
+
+
+            // //Save info to file
+            // str = username + ", " + password + ", " + fullname + ", " + phoneNo;
+            // myFile.open("member.txt", std::ios::app);
+            // if(myFile.is_open()){
+            //     myFile << "\n" << str;
+            //     myFile.close();
+            // }
 
             cout << "\nRegister Succesfully!!!\n";
             cout << "Press Enter to return to main menu....";
+            appSystem.isLoggedIn = true;
             cin.ignore();
             system("cls");
-            mainMenu();
+            memberOptions(appSystem);
             loop = 0;
             break;
         case 2:
@@ -131,7 +147,7 @@ void guestOptions() {
         case 0:
             //Return to Main menu
             system("cls");
-            mainMenu();
+            mainMenu(appSystem);
             loop = 0;
             break;
         default:
@@ -141,15 +157,17 @@ void guestOptions() {
     }
 }
 
-void memberOptions() {
+void memberOptions(System appSystem) {
     //Declare pointer for username and password
     string username, password;
   
     system("cls");
-    cin.ignore();
+    //cin.ignore();
 
-    bool loop = 1;
-    while(loop) {
+    while(1) {
+        if(appSystem.isLoggedIn=true){
+            break;
+        }
         loginInput(&username, &password);
         if(!isLoggedIn(username, password)) {
             cout << "Wrong password or username!!!\n";
@@ -173,9 +191,7 @@ void memberOptions() {
         }
     }
 
-    Member* member = new Member(username, password);
-    member->setName("Quan");
-    member->setphoneNo("032164564654");
+    Member* member = appSystem.members.back();
   
     //system("cls");
     cout << "\n***** MEMBER MENU *****\n\n";
@@ -188,10 +204,11 @@ void memberOptions() {
     cout << "7. Rating\n";
     cout << "0. Return to Main menu\n";
     cout << "\nEnter your choice: ";
+    
     int choice;
     switch(getInput(choice)){
-    case 1: //View Info
-        cout << member->showInfo();
+    case 1:
+        member->showInfo();
         break;
     case 2: //Add Houses
         break;
@@ -207,14 +224,14 @@ void memberOptions() {
         break;
     case 0:
         system("cls");
-        mainMenu();
+        mainMenu(appSystem);
         break;
     default:
         cout << "Wrong Input\n";
         cout << "Press ENTER to Continue....\n";
         cin.ignore();
         cin.ignore();
-        mainMenu();
+        mainMenu(appSystem);
     }
 }
 
@@ -332,7 +349,7 @@ void loadData(System &appSystem){
             if(numOfMemberValue == 3){fullname = tempStr; continue;};
             if(numOfMemberValue == 4){
                 phoneNumber = tempStr;
-                Member* member = new Member(username, password, fullname, phoneNumber);
+                Member *member = new Member(username, password, fullname, phoneNumber);
                 appSystem.members.push_back(member);
                 numOfMemberValue = 0;
                 continue;
@@ -366,7 +383,18 @@ int main() {
     cout << "s3695412, Hoang Ninh\n";
     cout << "s3515639, Quyen Nguyen\n";
     cout << "s3927196, Duy Hoang\n";
-    mainMenu();
+
+    //mainMenu();
     //readFile();
+
+    System appSystem; //Initialize an instance to manage the whole system later
+    loadData(appSystem);
+    for(Member *each : appSystem.members){
+        each->showInfo();
+    }
+    for(House *each : appSystem.houses){
+        each->showInfo();
+    }
+    //mainMenu(appSystem);
     return 0;
 }
