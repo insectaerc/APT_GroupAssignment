@@ -27,6 +27,15 @@ class System{
         std::vector<Member*> members;
         std::vector<House*> houses;
         System(){};
+
+        void showHousesGuest(){
+            std::cout << "All houses information:\n";
+            for(House *eachHouse : this->houses){
+                std::cout << "-------------------------------------\n";
+                std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
+                << "Description: " << eachHouse->description << "\n";
+            }
+        };
 };
 
 void saveData(System appSystem);
@@ -141,7 +150,7 @@ void guestOptions(System appSystem) {
             break;
         case 2:
             //View House Menu
-            //guest.viewHouses();
+            appSystem.showHousesGuest();
             loop = 0;
             break;
         case 0:
@@ -166,10 +175,10 @@ void memberOptions(System appSystem) {
 
     bool loop = 1;
     while(loop) {
-        // if(appSystem.isLoggedIn=true){
-        //     loop = 0;
-        //     break;
-        // }
+        if(appSystem.isLoggedIn=true){
+            loop = 0;
+            break;
+        }
         loginInput(&username, &password);
         if(!isLoggedIn(username, password)) {
             cout << "Wrong password or username!!!\n";
@@ -428,6 +437,6 @@ int main() {
     //     each->showInfo();
     // }
 
-    //mainMenu(appSystem);
+    mainMenu(appSystem);
     return 0;
 }
