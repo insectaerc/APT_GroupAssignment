@@ -5,6 +5,7 @@
 
 #include "House.h"
 #include <iostream>
+#include <vector>
 
 class Member {
 private:
@@ -24,7 +25,7 @@ public:
     Member(std::string username, std::string password, std::string fullname, std::string phoneNumber);
 
     //Functions
-    void addHouse();
+    void addHouse(std::vector<House*> *houses, std::string username);
     void list(House myHouse);
     void unlist(House myHouse);
     void request();
