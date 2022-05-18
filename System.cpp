@@ -86,16 +86,20 @@ void System::saveData(){
     members = this->members;
     houses = this->houses;
     newFile << "Member|";
+
+    std::string tmp;
     
     for(int i = 0; i < members.size(); i++) {
-        newFile << members[i]->getUsername() << "|" << members[i]->getPassword() << "|";
+        tmp = "\n" + members[i]->getUsername();
+        newFile << tmp << "|" << members[i]->getPassword() << "|";
         newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
     }
 
     newFile << "\nHouse|";
 
     for(int i = 0; i < houses.size(); i++) {
-        newFile << houses[i]->owner << "|" << houses[i]->location << "|" << houses[i]->description << "|";
+        tmp = "\n" + houses[i]->owner;
+        newFile << tmp << "|" << houses[i]->location << "|" << houses[i]->description << "|";
     }
     newFile.close();
 }
@@ -117,6 +121,8 @@ void System::mainMenu(){
             break;
         case 2:
             //Member Options Menu
+            this->isLoggedInVar = false;
+            std::cin.ignore();
             this->memberMenu();
             loop = 0;
             break;
@@ -127,8 +133,8 @@ void System::mainMenu(){
             break;
         case 0:
             //Close App
-            std::cout << "THANK YOU FOR USING OUR PROGRAM";
             this->saveData();
+            std::cout << "THANK YOU FOR USING OUR PROGRAM";
             exit(0);
         default:
             std::cout << "Invalid Choice. Enter again: ";
@@ -193,6 +199,7 @@ void System::guestMenu(){
             this->isLoggedInVar = true;
             std::cin.ignore();
             system("cls");
+            std::cin.ignore();
             this->memberMenu();
             loop = 0;
             break;
@@ -245,11 +252,19 @@ void System::memberMenu(){
             }
         }
         else {
+            this->isLoggedInVar = true;
+            std::string tmp;
+            for(int i = 0; i < this->members.size(); i++) {
+                tmp = this->members[i]->getUsername();
+                if(tmp.compare(username) == 0) {
+                    this->loggedInMember = members[i];
+                }
+            }
             break;
         }
     }
 
-    Member* member = this->members.back();
+    //Member* member = this->members.back();
   
     //system("cls");
     std::cout << "\n***** MEMBER MENU *****\n\n";
@@ -266,14 +281,27 @@ void System::memberMenu(){
     int choice;
     switch(getInput(choice)){
     case 1:
-        member->showInfo();
+        system("cls");
+        this->loggedInMember->showInfo();
+        std::cout << "Press Enter to return to member menu....";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->memberMenu();
         break;
     case 2: //Add Houses
+        
         break;
     case 3: //List/Unlist Houses
         break;
     case 4:
+        system("cls");
         this->showHousesMember();
+        std::cout << "Press Enter to return to member menu....";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->memberMenu();
         break;
     case 5: //Request
         break;
@@ -381,16 +409,16 @@ bool System::isLoggedIn(std::string username, std::string password){
     //Convert username to lowercase
     username = toLowercase(username);
 
-    //Read file function for below code
-    u = "username";
-    p = "123456789";
-
     //Validation
-    if(username == u && password == p) {
-        return true;
-    }
-    else {
-        return false;
+    for(int i = 0; i < this->members.size(); i++) {
+        u = this->members[i]->getUsername();
+        p = this->members[i]->getPassword();
+        if(username.compare(u) == 0 && password.compare(p) == 0) {
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
 }
 
