@@ -26,7 +26,9 @@ class System{
         bool isLoggedIn;
         std::vector<Member*> members;
         std::vector<House*> houses;
-        System(){};
+        System(){
+            this->isLoggedIn = false;
+        };
 };
 
 void saveData(System appSystem);
@@ -110,6 +112,7 @@ void guestOptions(System &appSystem) {
 
             //Convert username to lowercase
             username = toLowercase(username);
+            username = "\n" + username;
 
             //Save info to newMember instance
             newMember->setUserName(username);
@@ -161,11 +164,10 @@ void memberOptions(System &appSystem) {
     string username, password;
   
     system("cls");
-    cin.ignore();
 
     bool loop = 1;
     while(loop) {
-        if(appSystem.isLoggedIn=true){
+        if(appSystem.isLoggedIn == true){
             loop = 0;
             break;
         }
