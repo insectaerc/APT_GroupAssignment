@@ -86,16 +86,20 @@ void System::saveData(){
     members = this->members;
     houses = this->houses;
     newFile << "Member|";
+
+    std::string tmp;
     
     for(int i = 0; i < members.size(); i++) {
-        newFile << members[i]->getUsername() << "|" << members[i]->getPassword() << "|";
+        tmp = "\n" + members[i]->getUsername();
+        newFile << tmp << "|" << members[i]->getPassword() << "|";
         newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
     }
 
     newFile << "\nHouse|";
 
     for(int i = 0; i < houses.size(); i++) {
-        newFile << houses[i]->owner << "|" << houses[i]->location << "|" << houses[i]->description << "|";
+        tmp = "\n" + houses[i]->owner;
+        newFile << tmp << "|" << houses[i]->location << "|" << houses[i]->description << "|";
     }
     newFile.close();
 }
@@ -129,8 +133,8 @@ void System::mainMenu(){
             break;
         case 0:
             //Close App
-            std::cout << "THANK YOU FOR USING OUR PROGRAM";
             this->saveData();
+            std::cout << "THANK YOU FOR USING OUR PROGRAM";
             exit(0);
         default:
             std::cout << "Invalid Choice. Enter again: ";
