@@ -298,7 +298,7 @@ void System::memberMenu(){
         break;
     case 2: //Add Houses
         std::cin.ignore();
-        this->loggedInMember->addHouse(&this->houses, username);
+        this->loggedInMember->addHouse(houses, loggedInMember->getUsername());
         std::cout << "Option: \n";
         for(int i = 0; i < houses.size(); i++) {
             houses[i]->showInfo();
@@ -367,14 +367,11 @@ bool System::isLoggedIn(std::string username, std::string password){
 
     //Convert username to lowercase
     username = toLowercase(username);
-    std::cout << "us: " << username << ", pw: " << password << std::endl;
-    std::cout << "size: " << this->members.size() << std::endl;
 
     //Validation
     for(int i = 0; i < this->members.size(); i++) {
         u = this->members[i]->getUsername();
         p = this->members[i]->getPassword();
-        std::cout << "u: " << u << ", p: " << p << std::endl;
         if(username.compare(u) == 0 && password.compare(p) == 0) {
             return true;
         } 
