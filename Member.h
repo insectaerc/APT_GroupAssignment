@@ -31,6 +31,8 @@ public:
     void addHouse(std::vector<House*> &houses, std::string username);
     void list(House *myHouse);
     void unlist(House *myHouse);
+    bool searchHouses(std::string cityName, std::vector<House*> houses, std::vector<House*> &availableHouses);
+    void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests);
     void viewRequests(std::vector<Request*> requests);
     void showInfo();
 

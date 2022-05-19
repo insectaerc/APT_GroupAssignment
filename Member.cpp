@@ -63,6 +63,36 @@ void Member::unlist(House *myHouse) {
     }
 }
 
+bool Member::searchHouses(std::string city, std::vector<House*> houses, std::vector<House*> &availableHouses){
+    system("cls");
+    std::cout << "You selected " << city << " city. Available houses in " << city << " city:\n\n";
+    int order = 0;
+    for(int i = 0; i < houses.size(); i++){
+        if( city == houses[i]->location && 
+            this->creditPoints >= houses[i]->requiredCreditPoints &&
+            this->rating >= houses[i]->requiredRating){
+            std::cout << order + 1 << ". ";
+            houses[i]->showInfo();
+            availableHouses.push_back(houses[i]);
+            order++;
+        }
+    }
+
+    if(order == 0){return false;}else{return true;}
+}
+
+void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests){
+    for(int i = 0; i < availableHouses.size(); i++){
+        if(houseChoice == i+1){
+            Request *newRequest = new Request(this->username,
+            availableHouses[i]->getOwnerUsername(), "Pending");
+            requests.push_back(newRequest);
+            std::cout << "\nYou've successfully requested to occupy the house of the owner with username is "
+            << availableHouses[i]->getOwnerUsername() << ". Let's wait for the owner's response.\n";
+        }
+    }
+};
+
 void Member::viewRequests(std::vector<Request*> requests) {
     system("cls");
     std::cout << "List of all requests to your listed house:\n\n";
