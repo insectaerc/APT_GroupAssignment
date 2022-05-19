@@ -6,15 +6,20 @@ using std::string;
 
 class House{
     private:
-        double rating;
+        int rating;
         string review;
         bool availability;
     public:
         string owner;
         string location;
         string description;
+        int requiredRating;
+        int requiredCreditPoints;
         House();
+        //This constructor is called is Member::addHouse
         House(std::string owner, std::string location, std::string description, bool availability);
+        //This constructor is called in System::loadData
+        House(std::string owner, std::string location, std::string description, bool availability, int creditPoints, int reqRating, int rating);
 
         void showInfo();
         void showAvailability();
@@ -24,6 +29,7 @@ class House{
 
         //Getters
         bool getAvailability();
+        int getRating();
 };
 
 #endif

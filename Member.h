@@ -21,8 +21,9 @@ private:
 public:
     //Constructor
     Member();
-    Member(std::string username, std::string password);
     Member(std::string username, std::string password, std::string fullname, std::string phoneNumber);
+    Member(std::string username, std::string password, std::string fullname, std::string phoneNumber,
+            int creditPoints, int rating); //This constructor is called in System::loadData
 
     //Functions
     void addHouse(std::vector<House*> &houses, std::string username);

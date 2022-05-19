@@ -5,16 +5,25 @@
 #include <sstream>
 #include <vector>
 
-Member::Member() {}
-Member::Member(std::string userame, std::string pass) {
-    this->username = username;
-    this->password = pass;
+Member::Member() {
+    this->creditPoints = 500;
+    this->rating = 0;
 }
 Member::Member(std::string username, std::string password, std::string fullname, std::string phoneNumber){
     this->username = username;
     this->password = password;
     this->fullname = fullname;
     this->phoneNo = phoneNumber;
+    this->creditPoints = 500;
+    this->rating = 0;
+}
+Member::Member(std::string username, std::string password, std::string fullname, std::string phoneNumber, int creditPoints, int rating){    //This constructor is called in System::loadData
+    this->username = username;
+    this->password = password;
+    this->fullname = fullname;
+    this->phoneNo = phoneNumber;
+    this->creditPoints = creditPoints;
+    this->rating = rating;
 }
 
 std::string Member::getName() {
@@ -76,7 +85,6 @@ void Member::setUserName(std::string username){
 void Member::setPassword(std::string password){
     this->password= password;
 };
-
 void Member::setMyHouse(House *house) {
     this->myHouse = house;
 }
@@ -88,13 +96,12 @@ std::string Member::getUsername() {
 std::string Member::getPassword() {
     return this->password;
 }
-int Member::getRating() {
-    return this->rating;
-}
 int Member::getCreditPts() {
     return this->creditPoints;
 }
-
+int Member::getRating() {
+    return this->rating;
+}
 House *Member::getMyHouse() {
     return this->myHouse;
 }

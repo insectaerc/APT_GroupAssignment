@@ -11,7 +11,9 @@ void System::loadData(){
     std::string tempStr;
     std::string className;
     std::string username, password, fullname, phoneNumber;
+    int creditPoints, memRating;
     std::string houseOwner, location, description;
+    int houseRating, reqCrePoints, reqRating;
     bool availability;
     int numOfMemberValue = 0;
     int numOfHouseValue = 0;
@@ -31,19 +33,19 @@ void System::loadData(){
             if(numOfMemberValue == 1){username = tempStr; continue;};
             if(numOfMemberValue == 2){password = tempStr; continue;};
             if(numOfMemberValue == 3){fullname = tempStr; continue;};
-            if(numOfMemberValue == 4){
-                phoneNumber = tempStr;
-                Member *member = new Member(username, password, fullname, phoneNumber);
+            if(numOfMemberValue == 4){phoneNumber = tempStr; continue;};
+            if(numOfMemberValue == 5){creditPoints = std::stoi(tempStr); continue;};
+            if(numOfMemberValue == 6){
+                memRating = std::stoi(tempStr);
+                Member *member = new Member(username, password, fullname, phoneNumber, creditPoints, memRating);
                 this->members.push_back(member);
                 numOfMemberValue = 0;
                 continue;
             };
+            
         }else if (className == "House"){
             numOfHouseValue++;
-            if(numOfHouseValue == 1) {
-                houseOwner = tempStr; 
-                continue;
-            };
+            if(numOfHouseValue == 1) {houseOwner = tempStr; continue;};
             if(numOfHouseValue == 2) {
                 //Save locations to system for later use of showing members houses based on locations
                 location = tempStr;
@@ -63,13 +65,13 @@ void System::loadData(){
                     this->locations.push_back(location);
                 }
             };
-            if(numOfHouseValue == 3) {
-                //std::cout << "fasdfasd";
-                description = tempStr;
-            };
-            if(numOfHouseValue == 4) {
-                availability = strto_bool(tempStr);
-                House *house = new House(houseOwner, location, description, availability);
+            if(numOfHouseValue == 3) {description = tempStr; continue;};
+            if(numOfHouseValue == 4) {availability = strto_bool(tempStr); continue;};
+            if(numOfHouseValue == 5) {reqCrePoints = std::stoi(tempStr); continue;};
+            if(numOfHouseValue == 6) {reqRating = std::stoi(tempStr); continue;};
+            if(numOfHouseValue == 7){
+                houseRating = std::stoi(tempStr); 
+                House *house = new House(houseOwner, location, description, availability, reqCrePoints, reqRating, houseRating);
                 this->houses.push_back(house);
                 numOfHouseValue = 0;
                 continue;
@@ -110,6 +112,7 @@ void System::saveData(){
         tmp = "\n" + members[i]->getUsername();
         newFile << tmp << "|" << members[i]->getPassword() << "|";
         newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
+        newFile << members[i]->getCreditPts() << "|" << members[i]->getRating() << "|";
     }
 
     newFile << "\nHouse|";
@@ -118,6 +121,8 @@ void System::saveData(){
         tmp = "\n" + houses[i]->owner;
         newFile << tmp << "|" << houses[i]->location << "|";
         newFile << houses[i]->description << "|" << boolto_str(houses[i]->getAvailability()) << "|";
+        newFile << houses[i]->requiredCreditPoints << "|" << houses[i]->requiredRating << "|";
+        newFile << houses[i]->getRating() << "|";
     }
     newFile.close();
 }
@@ -339,7 +344,7 @@ void System::memberMenu(){
                 break;
             case 2: //Unlist Function
                 loggedInMember->unlist(loggedInMember->getMyHouse());
-                this->this->toMemberMenu();
+                this->toMemberMenu();
                 break;
             case 0: //Return to member menu
                 system("cls");
@@ -497,7 +502,7 @@ void System::showHousesMember(){
     for(std::string eachLocation : this->locations){
         std::cout << eachLocation << std::endl;
         for(int i = 0; i < this->houses.size(); i++){
-            if(eachLocation == this->houses[i]->location){
+            if(eachLocation == this->houses[i]->location && this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints && this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
                 std::cout << order << ". ";
                 this->houses[i]->showInfo();
                 order++;
@@ -546,7 +551,7 @@ std::string System::boolto_str(bool boolean){
     return "1";
 }
 
-void System::oMemberMenu() {
+void System::toMemberMenu() {
     std::cout << "Press Enter to return to member menu....";
     std::cin.ignore();
     std::cin.ignore();
