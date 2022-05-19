@@ -4,6 +4,7 @@
 // #define MEMBER_H
 
 #include "House.h"
+#include "Request.h"
 #include <iostream>
 #include <vector>
 
@@ -14,6 +15,7 @@ private:
     std::string fullname;
     std::string phoneNo;
     House *myHouse;
+    Request *requests;
     std::string review;
     int rating;
     int creditPoints;
@@ -29,8 +31,7 @@ public:
     void addHouse(std::vector<House*> &houses, std::string username);
     void list(House *myHouse);
     void unlist(House *myHouse);
-    void request();
-    void viewRequests();
+    void viewRequests(std::vector<Request*> requests);
     void showInfo();
 
     //Setters

@@ -5,27 +5,42 @@ System::System(){this->isLoggedInVar = false;}
 
 //Functions
 void System::loadData(){
+    //Fstream object to read file
     std::fstream myFile;
     myFile.open("data.txt", std::ios::in);
     std::string tempStr;
-    std::string className;
+
+    //Variables
+    std::string className;  // -> To detemine which class that the data in the file belongs to
+
+    //Variables for storing data belong to Members
     std::string username, password, fullname, phoneNumber;
     int creditPoints, memRating;
+    //Variables for storing data belong to Houses
     std::string houseOwner, location, description;
     int houseRating, reqCrePoints, reqRating;
     bool availability;
+    //Variables for storing data belong to Requests
+    std::string ownerUsername, occupierUsername, requestStatus;
+    //Variables to manage the number of attributes of each object
     int numOfMemberValue = 0;
     int numOfHouseValue = 0;
+    int numOfRequestValue = 0;
+
     while(getline(myFile, tempStr, '|')){
+        //Remove new line character \n from tempStr
+        tempStr.erase(remove(tempStr.begin(), tempStr.end(), '\n'), tempStr.end());
+
         if(tempStr == "Member"){
             className = "Member";
             continue;
-        }else if (tempStr == "\nHouse"){
+        }else if (tempStr == "House"){
             className = "House";
             continue;
+        }else if (tempStr == "Request"){
+            className = "Request";
+            continue;
         }
-        //Remove new line character \n from tempStr
-        tempStr.erase(remove(tempStr.begin(), tempStr.end(), '\n'), tempStr.end());
         
         if(className == "Member"){
             numOfMemberValue++;
@@ -57,8 +72,19 @@ void System::loadData(){
                 numOfHouseValue = 0;
                 continue;
             };
-        }
 
+        }else if(className == "Request"){
+            numOfRequestValue++;
+            if(numOfRequestValue == 1) {ownerUsername = tempStr; continue;};
+            if(numOfRequestValue == 2) {occupierUsername = tempStr; continue;};
+            if(numOfRequestValue == 3) {
+                requestStatus = tempStr;
+                Request *request = new Request(ownerUsername, occupierUsername, requestStatus);
+                this->requests.push_back(request);
+                numOfRequestValue = 0;
+                continue;
+            };
+        }
     }
 
     //Load houses to myHouse
@@ -75,29 +101,26 @@ void System::loadData(){
 void System::saveData(){
     std::cout << "Saving Data...." << std::endl;
 
-    //std::ifstream myFile;
+    //ofstream object to read file
     std::ofstream newFile;
-    //myFile.open("data.txt", std::ios::in);
     newFile.open("data.txt", std::ios::out);
 
     std::vector<Member*> members;
     std::vector<House*> houses;
-
     members = this->members;
     houses = this->houses;
-    newFile << "Member|";
-
     std::string tmp;
     
+    //Save data of Members
+    newFile << "Member|";
     for(int i = 0; i < members.size(); i++) {
         tmp = "\n" + members[i]->getUsername();
         newFile << tmp << "|" << members[i]->getPassword() << "|";
         newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
         newFile << members[i]->getCreditPts() << "|" << members[i]->getRating() << "|";
     }
-
+    //Save data of Houses
     newFile << "\nHouse|";
-
     for(int i = 0; i < houses.size(); i++) {
         tmp = "\n" + houses[i]->owner;
         newFile << tmp << "|" << houses[i]->location << "|";
@@ -105,6 +128,14 @@ void System::saveData(){
         newFile << houses[i]->requiredCreditPoints << "|" << houses[i]->requiredRating << "|";
         newFile << houses[i]->getRating() << "|";
     }
+    //Save data of Requests
+    newFile << "\nRequest|";
+    for(int i = 0; i < this->requests.size(); i++) {
+        newFile <<  "\n" + this->requests[i]->getOwnerUsername() << "|" 
+                << this->requests[i]->getOccupierUsername() << "|"
+                << this->requests[i]->getStatus() << "|";
+    }
+    
     newFile.close();
 }
 
@@ -344,6 +375,12 @@ void System::memberMenu(){
             system("cls");
             break;
         case 6: //View requests
+            this->loggedInMember->viewRequests(this->requests);
+            std::cout << "\n\nPress Enter to return to main menu.";
+            std::cin.ignore();
+            std::cin.ignore();
+            system("cls");
+            this->memberMenu();
             break;
         case 7: //Rating
             break;

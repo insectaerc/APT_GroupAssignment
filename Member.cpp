@@ -63,12 +63,16 @@ void Member::unlist(House *myHouse) {
     }
 }
 
-void Member::request() {
-
-}
-
-void Member::viewRequests() {
-
+void Member::viewRequests(std::vector<Request*> requests) {
+    system("cls");
+    std::cout << "List of all requests to your listed house:\n\n";
+    for(int i = 0; i < requests.size(); i++){
+        if(requests[i]->getOwnerUsername() == this->username){
+            std::cout << i+1 << ". ";
+            std::cout << "Requester's username: " << requests[i]->getOccupierUsername();
+            std::cout << " ------------- Status: " << requests[i]->getStatus() << "\n";
+        }
+    }
 }
 
 void Member::showInfo() {
