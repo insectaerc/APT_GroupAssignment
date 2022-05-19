@@ -138,25 +138,22 @@ void System::mainMenu(){
     bool loop = 1;
     int choice;
     getInput(choice);
-    while(loop) {
+    while(1) {
         switch(choice){
         case 1:
             //Guest Options Menu
             this->guestMenu();
-            loop = 0;
             break;
         case 2:
             //Member Options Menu
             this->isLoggedInVar = false;
             std::cin.ignore();
             this->memberMenu();
-            loop = 0;
             break;
         case 3:
             //Admin Options Menu
             std::cin.ignore();
             this->adminMenu();
-            loop = 0;
             break;
         case 0:
             //Close App
@@ -184,8 +181,7 @@ void System::guestMenu(){
 
     int choice;
     getInput(choice);
-    bool loop = 1;
-    while(loop) {
+    while(1) {
         switch(choice){
         case 1: //Register Menu
             std::cin.ignore();
@@ -231,7 +227,6 @@ void System::guestMenu(){
             std::cin.ignore();
             system("cls");
             this->memberMenu();
-            loop = 0;
             break;
         case 2:
             //View House Menu
@@ -240,13 +235,11 @@ void System::guestMenu(){
             std::cout << "Press Enter to return to main menu....";
             std::cin.ignore();
             this->mainMenu();
-            loop = 0;
             break;
         case 0:
             //Return to Main menu
             system("cls");
             this->mainMenu();
-            loop = 0;
             break;
         default:
             std::cout << "Invalid Choice. Enter again: ";
@@ -319,8 +312,9 @@ void System::memberMenu(){
     
     int choice;
     int list_option;
+    getInput(choice);
     while(1) {
-        switch(getInput(choice)){
+        switch(choice){
         case 1:
             system("cls");
             this->loggedInMember->showInfo();
@@ -336,25 +330,27 @@ void System::memberMenu(){
             std::cout << "2. Unlist house" << std::endl;
             std::cout << "0. Return to Member menu" << std::endl;
             std::cout << "\nEnter your choice: ";
-
-            switch(getInput(list_option)) {
-            case 1: //List Function
-                loggedInMember->list(loggedInMember->getMyHouse());
-                this->toMemberMenu();
-                break;
-            case 2: //Unlist Function
-                loggedInMember->unlist(loggedInMember->getMyHouse());
-                this->toMemberMenu();
-                break;
-            case 0: //Return to member menu
-                system("cls");
-                this->memberMenu();
-                break;
-            default:
-                std::cout << "Invalid Choice. Enter again: ";
-                getInput(choice);
+            getInput(list_option);
+            while(1) {
+                switch(list_option) {
+                case 1: //List Function
+                    loggedInMember->list(loggedInMember->getMyHouse());
+                    this->toMemberMenu();
+                    break;
+                case 2: //Unlist Function
+                    loggedInMember->unlist(loggedInMember->getMyHouse());
+                    this->toMemberMenu();
+                    break;
+                case 0: //Return to member menu
+                    system("cls");
+                    this->memberMenu();
+                    break;
+                default:
+                    std::cout << "Invalid Choice. Enter again: ";
+                    getInput(list_option);
+                }
             }
-        case 4:
+        case 4: //Search Houses
             system("cls");
             this->showHousesMember();
             this->toMemberMenu();
@@ -389,7 +385,8 @@ void System::adminMenu() {
             std::cout << "Wrong password or username!!!\n";
             std::cout << "Return to main menu? (Y/N): ";
             char choice;
-            switch(getInput(choice)){
+            getInput(choice);
+            switch(choice){
                 case 'Y': case 'y':
                     this->mainMenu();
                     loop = 0;
