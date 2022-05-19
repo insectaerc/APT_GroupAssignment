@@ -124,6 +124,8 @@ void System::saveData(){
 
 void System::mainMenu(){
 
+    this->houses[0].setAvailability(1);
+
     //Show Options
     std::cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
     std::cout << "0. EXIT\n";
@@ -414,7 +416,6 @@ void System::adminMenu() {
     }
 }
 
-
 void System::loginInput(std::string *u, std::string *p){
     while(1) {
         std::cout << "Enter username: ";
@@ -497,12 +498,12 @@ void System::showHousesMember(){
 
 void System::showMembersAdmin(){
     std::cout << "\n\nMembers Information:\n";
-    for (Member *eachMember : this->members) {
-        std::cout << "\nUsername: " << eachMember->getUsername()
-                  << "\nFullname: " << eachMember->getName()
-                  << "\nPhone number: " << eachMember->getphoneNo()
-                  << "\nRating: " << eachMember->getRating()
-                  << "\nCredit point: " << eachMember->getCreditPts() << "\n";
+    for (Member eachMember : this->members) {
+        std::cout << "\nUsername: " << eachMember.getUsername()
+                  << "\nFullname: " << eachMember.getName()
+                  << "\nPhone number: " << eachMember.getphoneNo()
+                  << "\nRating: " << eachMember.getRating()
+                  << "\nCredit point: " << eachMember.getCreditPts() << "\n";
                   //<< "\n House location: " << eachMember->myHouse->location
                   //<< "\n House description: " << eachMember->myHouse->description << "\n";
     }
@@ -510,14 +511,16 @@ void System::showMembersAdmin(){
 
 void System::showHousesAdmin(){
     std::cout << "\n\nHouses Information:\n";
-    for (House *eachHouse : houses) {
-        std::cout << "\nLocation: " << eachHouse->location
-                  << "\nDescription: " << eachHouse->description
+    for (House eachHouse : houses) {
+        std::cout << "\nLocation: " << eachHouse.location
+                  << "\nDescription: " << eachHouse.description
                   //<< "\n Rating: " << house->rating
-                  << "\nOwner: " << eachHouse->owner << "\n";
+                  << "\nOwner: " << eachHouse.owner << "\n";
                   //<< "\n Review: " << house->review
                   //<< "\n Availability: " << house->availability << "\n";
     }
+}
+
 bool System::strto_bool(std::string str){
     if(str.compare("0") == 0) {
         return false;
@@ -525,7 +528,7 @@ bool System::strto_bool(std::string str){
     return true;
 }
 
-string System::boolto_str(bool boolean){
+std::string System::boolto_str(bool boolean){
     if(boolean == 0) {
         return "0";
     }
