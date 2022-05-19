@@ -27,17 +27,17 @@ std::string Member::getphoneNo() {
 
 //Functions
 
-void Member::addHouse(std::vector<House*> &houses, std::string username) {
+void Member::addHouse(std::vector<House> *houses, std::string username) {
     std::string location, description;
     std::cout << "Enter location: ";
-    getline(std::cin,location);
+    std::getline(std::cin,location);
     std::cout << "Enter description: ";
-    getline(std::cin,description);
+    std::getline(std::cin,description);
     House newhouse(username, location, description);
-    houses.push_back(&newhouse);
+    houses->push_back(newhouse);
     std::cout << "New House Added!!!\n";
-    for(int i = 0; i < houses.size(); i++) {
-        houses[i]->showInfo();
+    for(int i = 0; i < houses->size(); i++) {
+        houses->at(i).showInfo();
     }
 }
 

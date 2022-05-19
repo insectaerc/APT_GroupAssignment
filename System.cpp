@@ -32,7 +32,7 @@ void System::loadData(){
             if(numOfMemberValue == 3){fullname = tempStr; continue;};
             if(numOfMemberValue == 4){
                 phoneNumber = tempStr;
-                Member *member = new Member(username, password, fullname, phoneNumber);
+                Member member(username, password, fullname, phoneNumber);
                 this->members.push_back(member);
                 numOfMemberValue = 0;
                 continue;
@@ -62,7 +62,7 @@ void System::loadData(){
             if(numOfHouseValue == 3){
                 //std::cout << "fasdfasd";
                 description = tempStr;
-                House *house = new House(houseOwner, location, description);
+                House house(houseOwner, location, description);
                 this->houses.push_back(house);
                 numOfHouseValue = 0;
                 continue;
@@ -80,8 +80,8 @@ void System::saveData(){
     //myFile.open("data.txt", std::ios::in);
     newFile.open("data.txt", std::ios::out);
 
-    std::vector<Member*> members;
-    std::vector<House*> houses;
+    std::vector<Member> members;
+    std::vector<House> houses;
 
     members = this->members;
     houses = this->houses;
@@ -90,16 +90,16 @@ void System::saveData(){
     std::string tmp;
     
     for(int i = 0; i < members.size(); i++) {
-        tmp = "\n" + members[i]->getUsername();
-        newFile << tmp << "|" << members[i]->getPassword() << "|";
-        newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
+        tmp = "\n" + members[i].getUsername();
+        newFile << tmp << "|" << members[i].getPassword() << "|";
+        newFile << members[i].getName() << "|" << members[i].getphoneNo() << "|";
     }
 
     newFile << "\nHouse|";
 
     for(int i = 0; i < houses.size(); i++) {
-        tmp = "\n" + houses[i]->owner;
-        newFile << tmp << "|" << houses[i]->location << "|" << houses[i]->description << "|";
+        tmp = "\n" + houses[i].owner;
+        newFile << tmp << "|" << houses[i].location << "|" << houses[i].description << "|";
     }
     newFile.close();
 }
@@ -152,7 +152,7 @@ void System::guestMenu(){
     std::cout << "\nEnter your choice: ";
     
     //Create a Member instance
-    Member *newMember = new Member();
+    Member newMember;
     string username, password, fullname, phoneNo, tmp;
 
     int choice;
@@ -174,10 +174,10 @@ void System::guestMenu(){
             username = toLowercase(username);
 
             //Save info to newMember instance
-            newMember->setUserName(username);
-            newMember->setPassword(password);
-            newMember->setName(fullname);
-            newMember->setphoneNo(phoneNo);
+            newMember.setUserName(username);
+            newMember.setPassword(password);
+            newMember.setName(fullname);
+            newMember.setphoneNo(phoneNo);
 
             this->members.push_back(newMember);
             //std::cout << appSystem.members.size();
@@ -196,7 +196,7 @@ void System::guestMenu(){
             std::cout << "Press Enter to go to member menu....";
             this->isLoggedInVar = true;
             for(int i = 0; i < this->members.size(); i++) {
-                tmp = this->members[i]->getUsername();
+                tmp = this->members[i].getUsername();
                 if(tmp.compare(username) == 0) {
                     this->loggedInMember = members[i];
                 }
@@ -262,7 +262,7 @@ void System::memberMenu(){
             this->isLoggedInVar = true;
             std::string tmp;
             for(int i = 0; i < this->members.size(); i++) {
-                tmp = this->members[i]->getUsername();
+                tmp = this->members[i].getUsername();
                 if(tmp.compare(username) == 0) {
                     this->loggedInMember = members[i];
                 }
@@ -289,7 +289,7 @@ void System::memberMenu(){
     switch(getInput(choice)){
     case 1:
         system("cls");
-        this->loggedInMember->showInfo();
+        this->loggedInMember.showInfo();
         std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
         std::cin.ignore();
@@ -298,10 +298,10 @@ void System::memberMenu(){
         break;
     case 2: //Add Houses
         std::cin.ignore();
-        this->loggedInMember->addHouse(houses, loggedInMember->getUsername());
+        this->loggedInMember.addHouse(&this->houses, this->loggedInMember.getUsername());
         std::cout << "Option: \n";
         for(int i = 0; i < houses.size(); i++) {
-            houses[i]->showInfo();
+            houses[i].showInfo();
         }
         std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
@@ -370,8 +370,8 @@ bool System::isLoggedIn(std::string username, std::string password){
 
     //Validation
     for(int i = 0; i < this->members.size(); i++) {
-        u = this->members[i]->getUsername();
-        p = this->members[i]->getPassword();
+        u = this->members[i].getUsername();
+        p = this->members[i].getPassword();
         if(username.compare(u) == 0 && password.compare(p) == 0) {
             return true;
         } 
@@ -393,10 +393,10 @@ std::string System::toLowercase(std::string str){
 
 void System::showHousesGuest(){
     std::cout << "All houses information:\n";
-    for(House *eachHouse : this->houses){
+    for(House eachHouse : this->houses){
         std::cout << "-------------------------------------\n";
-        std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
-        << "Description: " << eachHouse->description << "\n";
+        std::cout << "Location: " << eachHouse.location << ", Owner:" << eachHouse.owner << "\n"
+        << "Description: " << eachHouse.description << "\n";
     }
 }
 
@@ -407,9 +407,9 @@ void System::showHousesMember(){
     for(std::string eachLocation : this->locations){
         std::cout << eachLocation << std::endl;
         for(int i = 0; i < this->houses.size(); i++){
-            if(eachLocation == this->houses[i]->location){
+            if(eachLocation == this->houses[i].location){
                 std::cout << order << ". ";
-                this->houses[i]->showInfo();
+                this->houses[i].showInfo();
                 order++;
             }
         }

@@ -14,9 +14,9 @@ class System{
     public:
         //Attributes
         bool isLoggedInVar;
-        Member *loggedInMember;
-        std::vector<Member*> members;
-        std::vector<House*> houses;
+        Member loggedInMember;
+        std::vector<Member> members;
+        std::vector<House> houses;
         std::vector<std::string> locations;
 
         //Constructor
