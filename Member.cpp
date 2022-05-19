@@ -27,17 +27,17 @@ std::string Member::getphoneNo() {
 
 //Functions
 
-void Member::addHouse(std::vector<House> *houses, std::string username) {
+void Member::addHouse(std::vector<House*> &houses, std::string username) {
     std::string location, description;
     std::cout << "Enter location: ";
     std::getline(std::cin,location);
     std::cout << "Enter description: ";
     std::getline(std::cin,description);
-    House newhouse(username, location, description, 0);
-    houses->push_back(newhouse);
+    House *newhouse = new House(username, location, description, 0);
+    houses.push_back(newhouse);
     std::cout << "New House Added!!!\n";
-    for(int i = 0; i < houses->size(); i++) {
-        houses->at(i).showInfo();
+    for(int i = 0; i < houses.size(); i++) {
+        houses[i]->showInfo();
     }
 }
 
@@ -60,7 +60,7 @@ void Member::setPassword(std::string password){
     this->password= password;
 };
 
-void Member::setMyHouse(House house) {
+void Member::setMyHouse(House *house) {
     this->myHouse = house;
 }
 
@@ -78,7 +78,7 @@ int Member::getCreditPts() {
     return this->creditPoints;
 }
 
-House Member::getMyHouse() {
+House *Member::getMyHouse() {
     return this->myHouse;
 }
 

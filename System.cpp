@@ -33,7 +33,7 @@ void System::loadData(){
             if(numOfMemberValue == 3){fullname = tempStr; continue;};
             if(numOfMemberValue == 4){
                 phoneNumber = tempStr;
-                Member member(username, password, fullname, phoneNumber);
+                Member *member = new Member(username, password, fullname, phoneNumber);
                 this->members.push_back(member);
                 numOfMemberValue = 0;
                 continue;
@@ -69,7 +69,7 @@ void System::loadData(){
             };
             if(numOfHouseValue == 4) {
                 availability = strto_bool(tempStr);
-                House house(houseOwner, location, description, availability);
+                House *house = new House(houseOwner, location, description, availability);
                 this->houses.push_back(house);
                 numOfHouseValue = 0;
                 continue;
@@ -81,8 +81,8 @@ void System::loadData(){
     //Load houses to myHouse
     for(int i = 0; i < this->members.size(); i++) {
         for(int j = 0; j < this->houses.size(); j++) {
-            if(this->members[i].getUsername().compare(this->houses[j].owner) == 0) {
-                this->members[i].setMyHouse(this->houses[j]);
+            if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
+                this->members[i]->setMyHouse(this->houses[j]);
             }
         }
     }
@@ -97,8 +97,8 @@ void System::saveData(){
     //myFile.open("data.txt", std::ios::in);
     newFile.open("data.txt", std::ios::out);
 
-    std::vector<Member> members;
-    std::vector<House> houses;
+    std::vector<Member*> members;
+    std::vector<House*> houses;
 
     members = this->members;
     houses = this->houses;
@@ -107,24 +107,24 @@ void System::saveData(){
     std::string tmp;
     
     for(int i = 0; i < members.size(); i++) {
-        tmp = "\n" + members[i].getUsername();
-        newFile << tmp << "|" << members[i].getPassword() << "|";
-        newFile << members[i].getName() << "|" << members[i].getphoneNo() << "|";
+        tmp = "\n" + members[i]->getUsername();
+        newFile << tmp << "|" << members[i]->getPassword() << "|";
+        newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
     }
 
     newFile << "\nHouse|";
 
     for(int i = 0; i < houses.size(); i++) {
-        tmp = "\n" + houses[i].owner;
-        newFile << tmp << "|" << houses[i].location << "|";
-        newFile << houses[i].description << "|" << boolto_str(houses[i].getAvailability()) << "|";
+        tmp = "\n" + houses[i]->owner;
+        newFile << tmp << "|" << houses[i]->location << "|";
+        newFile << houses[i]->description << "|" << boolto_str(houses[i]->getAvailability()) << "|";
     }
     newFile.close();
 }
 
 void System::mainMenu(){
 
-    this->houses[0].setAvailability(1);
+    this->houses[0]->setAvailability(1);
 
     //Show Options
     std::cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -173,7 +173,7 @@ void System::guestMenu(){
     std::cout << "\nEnter your choice: ";
     
     //Create a Member instance
-    Member newMember;
+    Member *newMember = new Member();
     string username, password, fullname, phoneNo, tmp;
 
     int choice;
@@ -195,10 +195,10 @@ void System::guestMenu(){
             username = toLowercase(username);
 
             //Save info to newMember instance
-            newMember.setUserName(username);
-            newMember.setPassword(password);
-            newMember.setName(fullname);
-            newMember.setphoneNo(phoneNo);
+            newMember->setUserName(username);
+            newMember->setPassword(password);
+            newMember->setName(fullname);
+            newMember->setphoneNo(phoneNo);
 
             this->members.push_back(newMember);
             //std::cout << appSystem.members.size();
@@ -217,7 +217,7 @@ void System::guestMenu(){
             std::cout << "Press Enter to go to member menu....";
             this->isLoggedInVar = true;
             for(int i = 0; i < this->members.size(); i++) {
-                tmp = this->members[i].getUsername();
+                tmp = this->members[i]->getUsername();
                 if(tmp.compare(username) == 0) {
                     this->loggedInMember = members[i];
                 }
@@ -283,7 +283,7 @@ void System::memberMenu(){
             this->isLoggedInVar = true;
             std::string tmp;
             for(int i = 0; i < this->members.size(); i++) {
-                tmp = this->members[i].getUsername();
+                tmp = this->members[i]->getUsername();
                 if(tmp.compare(username) == 0) {
                     this->loggedInMember = members[i];
                 }
@@ -310,7 +310,7 @@ void System::memberMenu(){
     switch(getInput(choice)){
     case 1:
         system("cls");
-        this->loggedInMember.showInfo();
+        this->loggedInMember->showInfo();
         std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
         std::cin.ignore();
@@ -319,10 +319,10 @@ void System::memberMenu(){
         break;
     case 2: //Add Houses
         std::cin.ignore();
-        this->loggedInMember.addHouse(&this->houses, this->loggedInMember.getUsername());
+        this->loggedInMember->addHouse(this->houses, this->loggedInMember->getUsername());
         std::cout << "Option: \n";
         for(int i = 0; i < houses.size(); i++) {
-            houses[i].showInfo();
+            houses[i]->showInfo();
         }
         std::cout << "Press Enter to return to member menu....";
         std::cin.ignore();
@@ -448,8 +448,8 @@ bool System::isLoggedIn(std::string username, std::string password){
 
     //Validation
     for(int i = 0; i < this->members.size(); i++) {
-        u = this->members[i].getUsername();
-        p = this->members[i].getPassword();
+        u = this->members[i]->getUsername();
+        p = this->members[i]->getPassword();
         if(username.compare(u) == 0 && password.compare(p) == 0) {
             return true;
         } 
@@ -472,10 +472,10 @@ std::string System::toLowercase(std::string str){
 
 void System::showHousesGuest(){
     std::cout << "All houses information:\n";
-    for(House eachHouse : this->houses){
+    for(House *eachHouse : this->houses){
         std::cout << "-------------------------------------\n";
-        std::cout << "Location: " << eachHouse.location << ", Owner:" << eachHouse.owner << "\n"
-        << "Description: " << eachHouse.description << "\n";
+        std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
+        << "Description: " << eachHouse->description << "\n";
     }
 }
 
@@ -486,9 +486,9 @@ void System::showHousesMember(){
     for(std::string eachLocation : this->locations){
         std::cout << eachLocation << std::endl;
         for(int i = 0; i < this->houses.size(); i++){
-            if(eachLocation == this->houses[i].location){
+            if(eachLocation == this->houses[i]->location){
                 std::cout << order << ". ";
-                this->houses[i].showInfo();
+                this->houses[i]->showInfo();
                 order++;
             }
         }
@@ -498,12 +498,12 @@ void System::showHousesMember(){
 
 void System::showMembersAdmin(){
     std::cout << "\n\nMembers Information:\n";
-    for (Member eachMember : this->members) {
-        std::cout << "\nUsername: " << eachMember.getUsername()
-                  << "\nFullname: " << eachMember.getName()
-                  << "\nPhone number: " << eachMember.getphoneNo()
-                  << "\nRating: " << eachMember.getRating()
-                  << "\nCredit point: " << eachMember.getCreditPts() << "\n";
+    for (Member *eachMember : this->members) {
+        std::cout << "\nUsername: " << eachMember->getUsername()
+                  << "\nFullname: " << eachMember->getName()
+                  << "\nPhone number: " << eachMember->getphoneNo()
+                  << "\nRating: " << eachMember->getRating()
+                  << "\nCredit point: " << eachMember->getCreditPts() << "\n";
                   //<< "\n House location: " << eachMember->myHouse->location
                   //<< "\n House description: " << eachMember->myHouse->description << "\n";
     }
@@ -511,11 +511,11 @@ void System::showMembersAdmin(){
 
 void System::showHousesAdmin(){
     std::cout << "\n\nHouses Information:\n";
-    for (House eachHouse : houses) {
-        std::cout << "\nLocation: " << eachHouse.location
-                  << "\nDescription: " << eachHouse.description
+    for (House *eachHouse : houses) {
+        std::cout << "\nLocation: " << eachHouse->location
+                  << "\nDescription: " << eachHouse->description
                   //<< "\n Rating: " << house->rating
-                  << "\nOwner: " << eachHouse.owner << "\n";
+                  << "\nOwner: " << eachHouse->owner << "\n";
                   //<< "\n Review: " << house->review
                   //<< "\n Availability: " << house->availability << "\n";
     }
