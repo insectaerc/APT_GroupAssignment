@@ -12,7 +12,6 @@ void System::loadData(){
     std::string className;
     std::string username, password, fullname, phoneNumber;
     std::string houseOwner, location, description;
-    bool availability;
     int numOfMemberValue = 0;
     int numOfHouseValue = 0;
     while(getline(myFile, tempStr, '|')){
@@ -40,11 +39,8 @@ void System::loadData(){
             };
         }else if (className == "House"){
             numOfHouseValue++;
-            if(numOfHouseValue == 1) {
-                houseOwner = tempStr; 
-                continue;
-            };
-            if(numOfHouseValue == 2) {
+            if(numOfHouseValue == 1){houseOwner = tempStr; continue;};
+            if(numOfHouseValue == 2){
                 //Save locations to system for later use of showing members houses based on locations
                 location = tempStr;
                 if(this->locations.size() == 0){
@@ -63,27 +59,14 @@ void System::loadData(){
                     this->locations.push_back(location);
                 }
             };
-            if(numOfHouseValue == 3) {
+            if(numOfHouseValue == 3){
                 //std::cout << "fasdfasd";
                 description = tempStr;
-            };
-            if(numOfHouseValue == 4) {
-                availability = strto_bool(tempStr);
-                House house(houseOwner, location, description, availability);
+                House house(houseOwner, location, description);
                 this->houses.push_back(house);
                 numOfHouseValue = 0;
                 continue;
             };
-        }
-
-    }
-
-    //Load houses to myHouse
-    for(int i = 0; i < this->members.size(); i++) {
-        for(int j = 0; j < this->houses.size(); j++) {
-            if(this->members[i].getUsername().compare(this->houses[j].owner) == 0) {
-                this->members[i].setMyHouse(this->houses[j]);
-            }
         }
     }
     myFile.close();
@@ -116,14 +99,12 @@ void System::saveData(){
 
     for(int i = 0; i < houses.size(); i++) {
         tmp = "\n" + houses[i].owner;
-        newFile << tmp << "|" << houses[i].location << "|";
-        newFile << houses[i].description << "|" << boolto_str(houses[i].getAvailability()) << "|";
+        newFile << tmp << "|" << houses[i].location << "|" << houses[i].description << "|";
     }
     newFile.close();
 }
 
 void System::mainMenu(){
-
     //Show Options
     std::cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
     std::cout << "0. EXIT\n";
@@ -328,7 +309,6 @@ void System::memberMenu(){
         this->memberMenu();
         break;
     case 3: //List/Unlist Houses
-        
         break;
     case 4:
         system("cls");
@@ -339,7 +319,7 @@ void System::memberMenu(){
         system("cls");
         this->memberMenu();
         break;
-    case 5: //Request (will be in search house)
+    case 5: //Request
         break;
     case 6: //View requests
         break;
