@@ -30,6 +30,7 @@ class House{
         //Getters
         bool getAvailability();
         int getRating();
+        std::string getOwnerUsername();
 };
 
 #endif

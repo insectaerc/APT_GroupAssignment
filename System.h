@@ -6,6 +6,8 @@
 
 #include "Member.h"
 #include "House.h"
+#include "Request.h"
+#include "Input.h"
 
 //DEFINE
 #define MAXPASSLENGTH 20
@@ -17,6 +19,7 @@ class System{
         Member *loggedInMember;
         std::vector<Member*> members;
         std::vector<House*> houses;
+        std::vector<Request*> requests;
 
         //Constructor
         System();

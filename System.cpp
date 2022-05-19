@@ -1,5 +1,4 @@
 #include "System.h"
-#include "Input.h"
 
 //Constructor
 System::System(){this->isLoggedInVar = false;}
@@ -342,6 +341,7 @@ void System::memberMenu(){
             this->showHousesMember();
             break;
         case 5: //Request (will be in search house)
+            system("cls");
             break;
         case 6: //View requests
             break;
@@ -515,10 +515,14 @@ void System::showHousesInCity(std::string city){
     system("cls");
     std::cout << "You selected " << city << " city. Available houses in " << city << " city:\n\n";
     int order = 0;
+    std::vector<House*> availableHouses;
     for(int i = 0; i < this->houses.size(); i++){
-        if(city == this->houses[i]->location &&  this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints && this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
+        if( city == this->houses[i]->location && 
+            this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints &&
+            this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
             std::cout << order + 1 << ". ";
             this->houses[i]->showInfo();
+            availableHouses.push_back(this->houses[i]);
             order++;
         }
     }
@@ -531,6 +535,30 @@ void System::showHousesInCity(std::string city){
         system("cls");
         this->showHousesMember();
     }else{
+        int occupyChoice;
+        std::cout << "Select the house that you wish to occupy, if you want go back to main menu please enter 0: ";
+        getInput(occupyChoice);
+        
+        if(occupyChoice == 0){
+            system("cls");
+            this->memberMenu();
+        }
+
+        for(int i = 0; i < availableHouses.size(); i++){
+            if(occupyChoice == i+1){
+                Request *newRequest = new Request(this->loggedInMember->getUsername(),
+                availableHouses[i]->getOwnerUsername(), "Pending");
+                this->requests.push_back(newRequest);
+                std::cout << "\nYou've successfully requested to occupy the house of the owner with username is "
+                << availableHouses[i]->getOwnerUsername() << ". Let's wait for the owner's response.\n";
+                std::cout << "Press Enter to return to main menu.";
+                std::cin.ignore();
+                std::cin.ignore();
+                system("cls");
+                this->memberMenu();
+            }
+        }
+
         std::cout << "Press Enter to come back.";
         std::cin.ignore();
         std::cin.ignore();
