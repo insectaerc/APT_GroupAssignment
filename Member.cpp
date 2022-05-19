@@ -33,7 +33,7 @@ void Member::addHouse(std::vector<House> *houses, std::string username) {
     std::getline(std::cin,location);
     std::cout << "Enter description: ";
     std::getline(std::cin,description);
-    House newhouse(username, location, description);
+    House newhouse(username, location, description, 0);
     houses->push_back(newhouse);
     std::cout << "New House Added!!!\n";
     for(int i = 0; i < houses->size(); i++) {
@@ -60,12 +60,20 @@ void Member::setPassword(std::string password){
     this->password= password;
 };
 
+void Member::setMyHouse(House house) {
+    this->myHouse = house;
+}
+
 //Getters
 std::string Member::getUsername() {
     return this->username;
 }
 std::string Member::getPassword() {
     return this->password;
+}
+
+House Member::getMyHouse() {
+    return this->myHouse;
 }
 
 void getHouse() {}

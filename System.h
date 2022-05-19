@@ -33,4 +33,6 @@ class System{
         std::string toLowercase(std::string str);
         void showHousesGuest();
         void showHousesMember();
+        bool strto_bool(std::string str);
+        string boolto_str(bool boolean);
 };

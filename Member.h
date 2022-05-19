@@ -37,12 +37,14 @@ public:
     void setphoneNo(std::string phoneNo);
     void setUserName(std::string username);
     void setPassword(std::string password);
+    void setMyHouse(House house);
 
     //Getters
     std::string getName();
     std::string getphoneNo();
     std::string getUsername();
     std::string getPassword();
+    House getMyHouse();
     void getHouse();
     void getReview();
     void getRating();

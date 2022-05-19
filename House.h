@@ -14,9 +14,16 @@ class House{
         string location;
         string description;
         House();
-        House(std::string owner, std::string location, std::string description);
+        House(std::string owner, std::string location, std::string description, bool availability);
 
         void showInfo();
+        void showAvailability();
+
+        //Setters
+        void setAvailability(bool availability);
+
+        //Getters
+        bool getAvailability();
 };
 
 #endif
