@@ -46,25 +46,7 @@ void System::loadData(){
         }else if (className == "House"){
             numOfHouseValue++;
             if(numOfHouseValue == 1) {houseOwner = tempStr; continue;};
-            if(numOfHouseValue == 2) {
-                //Save locations to system for later use of showing members houses based on locations
-                location = tempStr;
-                if(this->locations.size() == 0){
-                    this->locations.push_back(location);
-                }
-                bool locationAlreadySaved = false;       //Save decision is based on this variable
-                for(std::string eachLocation : this->locations){ //With each location, we'll loop through the locations list, and compare
-                    if(location == eachLocation){   // If location is found, no save
-                        locationAlreadySaved = true;
-                        break;
-                    }else{
-                        continue;  //Else, go to the next location of the locations list to check
-                    }
-                }
-                if(locationAlreadySaved == false){ //At the end of the loop, if no location is found being similar, save
-                    this->locations.push_back(location);
-                }
-            };
+            if(numOfHouseValue == 2) {location = tempStr; continue;};
             if(numOfHouseValue == 3) {description = tempStr; continue;};
             if(numOfHouseValue == 4) {availability = strto_bool(tempStr); continue;};
             if(numOfHouseValue == 5) {reqCrePoints = std::stoi(tempStr); continue;};
@@ -314,7 +296,7 @@ void System::memberMenu(){
     std::cout << "5. Request House\n";
     std::cout << "6. View Requests\n";
     std::cout << "7. Rating\n";
-    std::cout << "0. Return to Main menu\n";
+    std::cout << "0. Log Out\n";
     std::cout << "\nEnter your choice: ";
     
     int choice;
@@ -324,6 +306,7 @@ void System::memberMenu(){
         case 1:
             system("cls");
             this->loggedInMember->showInfo();
+            std::cout << std::endl << std::endl;
             this->toMemberMenu();
             break;
         case 2: //Add Houses
@@ -354,10 +337,9 @@ void System::memberMenu(){
                 std::cout << "Invalid Choice. Enter again: ";
                 getInput(choice);
             }
-        case 4:
+        case 4: //Show houses to member based on cities
             system("cls");
             this->showHousesMember();
-            this->toMemberMenu();
             break;
         case 5: //Request (will be in search house)
             break;
@@ -433,6 +415,7 @@ void System::adminMenu() {
 }
 
 void System::loginInput(std::string *u, std::string *p){
+    std::cout << "--------------LOGIN--------------\n";
     while(1) {
         std::cout << "Enter username: ";
         std::getline(std::cin, *u);
@@ -496,20 +479,64 @@ void System::showHousesGuest(){
 }
 
 void System::showHousesMember(){
-    //This assumes that our app only supports Hanoi, Dalat, and Danang cities
-    std::cout << "Suitable houses for you: \n";
-    int order = 1;
-    for(std::string eachLocation : this->locations){
-        std::cout << eachLocation << std::endl;
-        for(int i = 0; i < this->houses.size(); i++){
-            if(eachLocation == this->houses[i]->location && this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints && this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
-                std::cout << order << ". ";
-                this->houses[i]->showInfo();
-                order++;
-            }
+    int city_option;
+    int choice;
+    bool loop = true;
+    std::cout << "The application only supports the below cities for now:\n";
+    std::cout << "1. Hanoi" << std::endl;
+    std::cout << "2. Saigon" << std::endl;
+    std::cout << "3. Da Nang" << std::endl;
+    std::cout << "0. Return to main menu" << std::endl << std::endl;
+    std::cout << "\nYour option: ";
+    while(loop){
+        switch (getInput(city_option)){
+            case 1:
+                this->showHousesInCity("Hanoi");
+                break;
+            case 2:
+                this->showHousesInCity("Saigon");
+                break;
+            case 3:
+                this->showHousesInCity("Danang");
+                break;
+            case 0:
+                system("cls");
+                this->memberMenu();
+                break;
+            default:
+                std::cout << "Invalid Choice. Enter again: ";
+                getInput(city_option);
+                break;
         }
-        std::cout << std::endl;
-    };
+    }
+}
+
+void System::showHousesInCity(std::string city){
+    system("cls");
+    std::cout << "You selected " << city << " city. Available houses in " << city << " city:\n\n";
+    int order = 0;
+    for(int i = 0; i < this->houses.size(); i++){
+        if(city == this->houses[i]->location &&  this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints && this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
+            std::cout << order + 1 << ". ";
+            this->houses[i]->showInfo();
+            order++;
+        }
+    }
+    std::cout << "\n";
+    if(order == 0){
+        std::cout << "So sorry, there is no house that is suitable for you right now.\n";
+        std::cout << "Press Enter to return and select another city.";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->showHousesMember();
+    }else{
+        std::cout << "Press Enter to come back.";
+        std::cin.ignore();
+        std::cin.ignore();
+        system("cls");
+        this->showHousesMember();
+    }
 }
 
 void System::showMembersAdmin(){

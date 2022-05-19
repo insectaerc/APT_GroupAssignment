@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 
+//Constructors
 Member::Member() {
     this->creditPoints = 500;
     this->rating = 0;
@@ -26,16 +27,8 @@ Member::Member(std::string username, std::string password, std::string fullname,
     this->rating = rating;
 }
 
-std::string Member::getName() {
-    return this->fullname;
-}
-
-std::string Member::getphoneNo() {
-    return this->phoneNo;
-}
 
 //Functions
-
 void Member::addHouse(std::vector<House*> &houses, std::string username) {
     std::string location, description;
     std::cout << "Enter location: ";
@@ -69,27 +62,30 @@ void Member::unlist(House *myHouse) {
         std::cout << "House is already unlisted!!\n";
     }
 }
-void Member::request() {}
-void Member::viewRequests() {}
 
-//Setters
-void Member::setName(std::string fullname) {
-    this->fullname = fullname;
+void Member::request() {
+
 }
-void Member::setphoneNo(std::string phoneNo) {
-    this->phoneNo = phoneNo;
+
+void Member::viewRequests() {
+
 }
-void Member::setUserName(std::string username){
-    this->username= username;
-};
-void Member::setPassword(std::string password){
-    this->password= password;
-};
-void Member::setMyHouse(House *house) {
-    this->myHouse = house;
+
+void Member::showInfo() {
+    std::cout << "--------------MEMBER INFORMATION--------------\n";
+    std::cout << "Full Name: " << this->fullname + "\n" 
+            << "Phone Number: " << this->phoneNo + "\n"
+            << "Credit Point: " << this->creditPoints << "\n"
+            << "Rating: " << this->rating << "\n";
 }
 
 //Getters
+std::string Member::getName() {
+    return this->fullname;
+}
+std::string Member::getphoneNo() {
+    return this->phoneNo;
+}
 std::string Member::getUsername() {
     return this->username;
 }
@@ -110,7 +106,19 @@ void getHouse() {}
 void getReview() {}
 void getocuppyingHouse() {}
 
-void Member::showInfo() {
-    //return ("Full Name: " + this->fullname + ", Phone No: " + this->phoneNo);
-    std::cout << "Full name: " + this->fullname + ", phone number: " + this->phoneNo + "\n";
+//Setters
+void Member::setName(std::string fullname) {
+    this->fullname = fullname;
+}
+void Member::setphoneNo(std::string phoneNo) {
+    this->phoneNo = phoneNo;
+}
+void Member::setUserName(std::string username){
+    this->username= username;
+};
+void Member::setPassword(std::string password){
+    this->password= password;
+};
+void Member::setMyHouse(House *house) {
+    this->myHouse = house;
 }

@@ -17,7 +17,6 @@ class System{
         Member *loggedInMember;
         std::vector<Member*> members;
         std::vector<House*> houses;
-        std::vector<std::string> locations;
 
         //Constructor
         System();
@@ -34,6 +33,7 @@ class System{
         std::string toLowercase(std::string str);
         void showHousesGuest();
         void showHousesMember();
+        void showHousesInCity(std::string city);
         void showMembersAdmin();
         void showHousesAdmin();
         bool strto_bool(std::string str);

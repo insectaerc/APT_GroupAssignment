@@ -31,6 +31,7 @@ public:
     void unlist(House *myHouse);
     void request();
     void viewRequests();
+    void showInfo();
 
     //Setters
     void setName(std::string name);
@@ -51,7 +52,6 @@ public:
     int getCreditPts();
     void getocuppyingHouse();
 
-    void showInfo();
 };
 
 //#endif
