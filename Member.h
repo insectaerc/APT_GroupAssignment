@@ -25,7 +25,7 @@ public:
     Member(std::string username, std::string password, std::string fullname, std::string phoneNumber);
 
     //Functions
-    void addHouse(std::vector<House*> *houses, std::string username);
+    void addHouse(std::vector<House> *houses, std::string username);
     void list(House myHouse);
     void unlist(House myHouse);
     void request();
@@ -37,12 +37,14 @@ public:
     void setphoneNo(std::string phoneNo);
     void setUserName(std::string username);
     void setPassword(std::string password);
+    void setMyHouse(House house);
 
     //Getters
     std::string getName();
     std::string getphoneNo();
     std::string getUsername();
     std::string getPassword();
+    House getMyHouse();
     void getHouse();
     void getReview();
     int getRating();

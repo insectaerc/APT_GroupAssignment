@@ -27,38 +27,17 @@ std::string Member::getphoneNo() {
 
 //Functions
 
-// void Member::addHouse() {
-//     //user1, location1, descript1, rating1, review1, 0
-//     string location, description, rating = "", review = "", availability = 0;
-//     string str;
-//     std::ofstream myFile;
-
-//     std::cout << "Enter location: ";
-//     std::getline(std::cin, location);
-
-//     std::cout << "Enter description: ";
-//     std::getline(std::cin, description);
-
-//     str = this->username + ", " + location + ", " + description + ", " + rating + ", " + review + ", " + availability;
-
-//     myFile.open("house.txt", std::ios::app);
-//     if(myFile.is_open()) {
-//         myFile << str << "\n";
-//         myFile.close();
-//     }
-// }
-
-void Member::addHouse(std::vector<House*> *houses, std::string username) {
+void Member::addHouse(std::vector<House> *houses, std::string username) {
     std::string location, description;
     std::cout << "Enter location: ";
-    getline(std::cin,location);
+    std::getline(std::cin,location);
     std::cout << "Enter description: ";
-    getline(std::cin,description);
-    House newhouse(username, location, description);
-    houses->push_back(&newhouse);
+    std::getline(std::cin,description);
+    House newhouse(username, location, description, 0);
+    houses->push_back(newhouse);
     std::cout << "New House Added!!!\n";
     for(int i = 0; i < houses->size(); i++) {
-        houses->at(i)->showInfo();
+        houses->at(i).showInfo();
     }
 }
 
@@ -81,6 +60,10 @@ void Member::setPassword(std::string password){
     this->password= password;
 };
 
+void Member::setMyHouse(House house) {
+    this->myHouse = house;
+}
+
 //Getters
 std::string Member::getUsername() {
     return this->username;
@@ -93,6 +76,10 @@ int Member::getRating() {
 }
 int Member::getCreditPts() {
     return this->creditPoints;
+}
+
+House Member::getMyHouse() {
+    return this->myHouse;
 }
 
 void getHouse() {}

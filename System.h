@@ -14,9 +14,9 @@ class System{
     public:
         //Attributes
         bool isLoggedInVar;
-        Member *loggedInMember;
-        std::vector<Member*> members;
-        std::vector<House*> houses;
+        Member loggedInMember;
+        std::vector<Member> members;
+        std::vector<House> houses;
         std::vector<std::string> locations;
 
         //Constructor
@@ -36,4 +36,6 @@ class System{
         void showHousesMember();
         void showMembersAdmin();
         void showHousesAdmin();
+        bool strto_bool(std::string str);
+        string boolto_str(bool boolean);
 };
