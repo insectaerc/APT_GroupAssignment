@@ -15,7 +15,7 @@ private:
     std::string fullname;
     std::string phoneNo;
     House *myHouse;
-    Request *requests;
+    std::vector<Request*> myRequests;
     std::string review;
     int rating;
     int creditPoints;
@@ -33,7 +33,8 @@ public:
     void unlist(House *myHouse);
     bool searchHouses(std::string cityName, std::vector<House*> houses, std::vector<House*> &availableHouses);
     void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests);
-    void viewRequests(std::vector<Request*> requests);
+    bool viewRequests();
+    void acceptRequest(int requestChoice);
     void showInfo();
 
     //Setters
@@ -49,6 +50,7 @@ public:
     std::string getUsername();
     std::string getPassword();
     House *getMyHouse();
+    std::vector<Request*> &getMyRequest();
     void getHouse();
     void getReview();
     int getRating();

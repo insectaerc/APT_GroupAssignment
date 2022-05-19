@@ -311,6 +311,12 @@ void System::memberMenu(){
                     this->loggedInMember = members[i];
                 }
             }
+            //Load requests to logged-in Member object
+            for(Request *eachReq : this->requests){
+                if(eachReq->getOwnerUsername() == this->loggedInMember->getUsername()){
+                    this->loggedInMember->getMyRequest().push_back(eachReq);
+                }
+            }
             break;
         }
     }
@@ -323,9 +329,8 @@ void System::memberMenu(){
     std::cout << "2. Add House\n";
     std::cout << "3. List/Unlist House\n";
     std::cout << "4. Search Houses\n";
-    std::cout << "5. Request House\n";
-    std::cout << "6. View Requests\n";
-    std::cout << "7. Rating\n";
+    std::cout << "5. View Requests\n";
+    std::cout << "6. Rating\n";
     std::cout << "0. Log Out\n";
     std::cout << "\nEnter your choice: ";
     
@@ -371,18 +376,30 @@ void System::memberMenu(){
             system("cls");
             this->showHousesMember();
             break;
-        case 5: //Request (will be in search house)
-            system("cls");
+        case 5: //View requests
+            if(this->loggedInMember->viewRequests() == false){
+                std::cout << "\n\nPress Enter to return to main menu.";
+                std::cin.ignore();
+                std::cin.ignore();
+                system("cls");
+                this->memberMenu();
+            }else{
+                int requestChoice;
+                std::cout << "\nSelect the request that you wish to accept, if you want go back to main menu please enter 0: ";
+                getInput(requestChoice);
+                if(requestChoice == 0){
+                    this->memberMenu();
+                }else{
+                    //this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                    this->loggedInMember->acceptRequest(requestChoice);
+                    std::cout << "Press Enter to return to main menu.";
+                    std::cin.ignore();
+                    std::cin.ignore();
+                    this->memberMenu();
+                }
+            }
             break;
-        case 6: //View requests
-            this->loggedInMember->viewRequests(this->requests);
-            std::cout << "\n\nPress Enter to return to main menu.";
-            std::cin.ignore();
-            std::cin.ignore();
-            system("cls");
-            this->memberMenu();
-            break;
-        case 7: //Rating
+        case 6: //Rating
             break;
         case 0:
             system("cls");

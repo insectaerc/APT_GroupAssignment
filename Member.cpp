@@ -93,16 +93,34 @@ void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice,
     }
 };
 
-void Member::viewRequests(std::vector<Request*> requests) {
+bool Member::viewRequests() {
     system("cls");
+    int numOfReq = 0;
     std::cout << "List of all requests to your listed house:\n\n";
-    for(int i = 0; i < requests.size(); i++){
-        if(requests[i]->getOwnerUsername() == this->username){
-            std::cout << i+1 << ". ";
-            std::cout << "Requester's username: " << requests[i]->getOccupierUsername();
-            std::cout << " ------------- Status: " << requests[i]->getStatus() << "\n";
+    for(int i = 0; i < this->myRequests.size(); i++){
+        numOfReq++;
+        std::cout << i+1 << ". ";
+        std::cout << "Requester's username: " << this->myRequests[i]->getOccupierUsername();
+        std::cout << " ------------- Status: " << this->myRequests[i]->getStatus() << "\n";
+    }
+    if(numOfReq == 0){
+        std::cout << "\nThere is no request to show for now.\n";
+        return false;
+    }else{return true;}
+}
+
+void Member::acceptRequest(int requestChoice){
+    Request *acceptedReq;
+    for(int i = 0; i < this->myRequests.size(); i++){
+        if(requestChoice == i+1){
+            this->myRequests[i]->setStatus("Accepted");
+            acceptedReq = this->myRequests[i];
+        }else{
+            this->myRequests[i]->setStatus("Rejected");
         }
     }
+    std::cout << "\nYou've successfully accepted the request of the member with username is ";
+    std::cout << acceptedReq->getOccupierUsername() << ".\n";
 }
 
 void Member::showInfo() {
@@ -135,7 +153,9 @@ int Member::getRating() {
 House *Member::getMyHouse() {
     return this->myHouse;
 }
-
+std::vector<Request*> &Member::getMyRequest(){
+    return this->myRequests;
+}
 void getHouse() {}
 void getReview() {}
 void getocuppyingHouse() {}
