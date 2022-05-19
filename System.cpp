@@ -149,6 +149,7 @@ void System::mainMenu(){
             break;
         case 3:
             //Admin Options Menu
+            std::cin.ignore();
             this->adminMenu();
             loop = 0;
             break;
@@ -256,6 +257,7 @@ void System::memberMenu(){
     system("cls");
 
     bool loop = 1;
+    bool loop2 = 1;
     while(loop) {
         if(this->isLoggedInVar == true){
             loop = 0;
@@ -266,17 +268,21 @@ void System::memberMenu(){
             std::cout << "Wrong password or username!!!\n";
             std::cout << "Return to Main Menu? (Y/N): ";
             char choice;
-            switch(getInput(choice)){
-                case 'Y': case 'y':
-                    this->mainMenu();
-                    loop = 0;
-                    break;
-                case 'N': case 'n':
-                    std::cin.ignore();
-                    break;
-                default:
-                    std::cout << "Invalid Choice. Enter again: ";
-                    getInput(choice);
+            loop2 = 1;
+            getInput(choice);
+            while(loop2) {
+                switch(choice){
+                    case 'Y': case 'y':
+                        this->mainMenu();
+                        break;
+                    case 'N': case 'n':
+                        std::cin.ignore();
+                        loop2 = 0;
+                        break;
+                    default:
+                        std::cout << "\nInvalid Choice. Enter again: ";
+                        getInput(choice);
+                }
             }
         }
         else {
@@ -307,56 +313,61 @@ void System::memberMenu(){
     std::cout << "\nEnter your choice: ";
     
     int choice;
-    switch(getInput(choice)){
-    case 1:
-        system("cls");
-        this->loggedInMember->showInfo();
-        std::cout << "Press Enter to return to member menu....";
-        std::cin.ignore();
-        std::cin.ignore();
-        system("cls");
-        this->memberMenu();
-        break;
-    case 2: //Add Houses
-        std::cin.ignore();
-        this->loggedInMember->addHouse(this->houses, this->loggedInMember->getUsername());
-        std::cout << "Option: \n";
-        for(int i = 0; i < houses.size(); i++) {
-            houses[i]->showInfo();
+    int list_option;
+    while(1) {
+        switch(getInput(choice)){
+        case 1:
+            system("cls");
+            this->loggedInMember->showInfo();
+            this->toMemberMenu();
+            break;
+        case 2: //Add Houses
+            std::cin.ignore();
+            this->loggedInMember->addHouse(this->houses, this->loggedInMember->getUsername());
+            this->toMemberMenu();
+            break;
+        case 3: //List/Unlist Houses
+            std::cout << "1. List house" << std::endl;
+            std::cout << "2. Unlist house" << std::endl;
+            std::cout << "0. Return to Member menu" << std::endl;
+            std::cout << "\nEnter your choice: ";
+
+            switch(getInput(list_option)) {
+            case 1: //List Function
+                loggedInMember->list(loggedInMember->getMyHouse());
+                this->toMemberMenu();
+                break;
+            case 2: //Unlist Function
+                loggedInMember->unlist(loggedInMember->getMyHouse());
+                this->this->toMemberMenu();
+                break;
+            case 0: //Return to member menu
+                system("cls");
+                this->memberMenu();
+                break;
+            default:
+                std::cout << "Invalid Choice. Enter again: ";
+                getInput(choice);
+            }
+        case 4:
+            system("cls");
+            this->showHousesMember();
+            this->toMemberMenu();
+            break;
+        case 5: //Request (will be in search house)
+            break;
+        case 6: //View requests
+            break;
+        case 7: //Rating
+            break;
+        case 0:
+            system("cls");
+            this->mainMenu();
+            break;
+        default:
+            std::cout << "Invalid Choice. Enter again: ";
+            getInput(choice);
         }
-        std::cout << "Press Enter to return to member menu....";
-        std::cin.ignore();
-        system("cls");
-        this->memberMenu();
-        break;
-    case 3: //List/Unlist Houses
-        
-        break;
-    case 4:
-        system("cls");
-        this->showHousesMember();
-        std::cout << "Press Enter to return to member menu....";
-        std::cin.ignore();
-        std::cin.ignore();
-        system("cls");
-        this->memberMenu();
-        break;
-    case 5: //Request (will be in search house)
-        break;
-    case 6: //View requests
-        break;
-    case 7: //Rating
-        break;
-    case 0:
-        system("cls");
-        this->mainMenu();
-        break;
-    default:
-        std::cout << "Wrong Input\n";
-        std::cout << "Press ENTER to Continue....\n";
-        std::cin.ignore();
-        std::cin.ignore();
-        this->mainMenu();
     }
 }
 
@@ -396,23 +407,23 @@ void System::adminMenu() {
     std::cout << "0. Return to Main menu\n";
     std::cout << "\nEnter your choice: ";
 
-    switch(getInput(choice)){
-    case 1: //View Members information
-        this->showMembersAdmin();
-        break;
-    case 2: //View Houses information
-        this->showHousesAdmin();
-        break;
-    case 0:
-        system("cls");
-        this->mainMenu();
-        break;
-    default:
-        std::cout << "Wrong Input\n";
-        std::cout << "Press ENTER to Continue....\n";
-        std::cin.ignore();
-        std::cin.ignore();
-        this->mainMenu();
+    getInput(choice);
+    while(1) {
+        switch(choice){
+        case 1: //View Members information
+            this->showMembersAdmin();
+            break;
+        case 2: //View Houses information
+            this->showHousesAdmin();
+            break;
+        case 0:
+            system("cls");
+            this->mainMenu();
+            break;
+        default:
+            std::cout << "Invalid Choice. Enter again: ";
+            getInput(choice);
+        }
     }
 }
 
@@ -451,6 +462,7 @@ bool System::isLoggedIn(std::string username, std::string password){
         u = this->members[i]->getUsername();
         p = this->members[i]->getPassword();
         if(username.compare(u) == 0 && password.compare(p) == 0) {
+            std::cout << "Logged In Successfully!\n";
             return true;
         } 
         else {
@@ -459,7 +471,6 @@ bool System::isLoggedIn(std::string username, std::string password){
     }
     return false;
 }
-
 
 std::string System::toLowercase(std::string str){
     for(int i = 0; i < str.length(); i++) {
@@ -533,4 +544,12 @@ std::string System::boolto_str(bool boolean){
         return "0";
     }
     return "1";
+}
+
+void System::oMemberMenu() {
+    std::cout << "Press Enter to return to member menu....";
+    std::cin.ignore();
+    std::cin.ignore();
+    system("cls");
+    this->memberMenu();
 }

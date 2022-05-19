@@ -41,8 +41,25 @@ void Member::addHouse(std::vector<House*> &houses, std::string username) {
     }
 }
 
-void Member::list(House myHouse) {}
-void Member::unlist(House myHouse) {}
+void Member::list(House *myHouse) {
+    if(myHouse->getAvailability() == 0) {
+        myHouse->setAvailability(1);
+        std::cout << "House listed successfully!!\n";
+    }
+    else {
+        std::cout << "House is already listed!!\n";
+    }
+}
+
+void Member::unlist(House *myHouse) {
+    if(myHouse->getAvailability() == 1) {
+        myHouse->setAvailability(0);
+        std::cout << "House unlisted successfully!!\n";
+    }
+    else {
+        std::cout << "House is already unlisted!!\n";
+    }
+}
 void Member::request() {}
 void Member::viewRequests() {}
 

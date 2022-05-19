@@ -38,4 +38,5 @@ class System{
         void showHousesAdmin();
         bool strto_bool(std::string str);
         string boolto_str(bool boolean);
+        void toMemberMenu();
 };

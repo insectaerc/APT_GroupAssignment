@@ -26,13 +26,12 @@ public:
 
     //Functions
     void addHouse(std::vector<House*> &houses, std::string username);
-    void list(House myHouse);
-    void unlist(House myHouse);
+    void list(House *myHouse);
+    void unlist(House *myHouse);
     void request();
     void viewRequests();
 
     //Setters
-
     void setName(std::string name);
     void setphoneNo(std::string phoneNo);
     void setUserName(std::string username);
