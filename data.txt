@@ -9,4 +9,4 @@ username2|Saigon|description2|0|300|10|5|
 username3|Da Nang|description3|1|400|7|5|
 username4|Saigon|description4|0|500|8|5|
 Request|
-username1|username4|Pending|
+username1|username4|Accepted|

@@ -417,7 +417,7 @@ void System::adminMenu() {
     bool loop = 1;
     while(loop) {
         loginInput(&username, &password);
-        if(this->isLoggedIn(username, password) == false) {
+        if(this->isLoggedInAdmin(username, password) == false) {
             std::cout << "Wrong password or username!!!\n";
             std::cout << "Return to main menu? (Y/N): ";
             char choice;
@@ -449,10 +449,20 @@ void System::adminMenu() {
     while(1) {
         switch(choice){
         case 1: //View Members information
+            system("cls");
             this->showMembersAdmin();
+            std::cout << "\nPress enter to return to main menu....\n";
+            std::cin.ignore();
+            std::cin.ignore();
+            this->mainMenu();
             break;
         case 2: //View Houses information
+            system("cls");
             this->showHousesAdmin();
+            std::cout << "\nPress enter to return to main menu....\n";
+            std::cin.ignore();
+            std::cin.ignore();
+            this->mainMenu();
             break;
         case 0:
             system("cls");
@@ -509,6 +519,27 @@ bool System::isLoggedIn(std::string username, std::string password){
         }
     }
     return false;
+}
+
+bool System::isLoggedInAdmin(std::string username, std::string password){
+    std::string u, p; // Correct username and password for admin
+
+    //Convert username to lowercase
+    username = toLowercase(username);
+
+    //Predefined admin username and password
+    u = "admin";
+    p = "admin123";
+
+    //Validation
+    if(username == u && password == p) {
+        std::cout << "\nAdmin logged in successfully!\n";
+        return true;
+    }
+    else {
+        return false;
+  
+    }
 }
 
 std::string System::toLowercase(std::string str){
