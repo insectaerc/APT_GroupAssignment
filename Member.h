@@ -14,6 +14,7 @@ private:
     std::string fullname;
     std::string phoneNo;
     House *myHouse;
+    int numOfHouse;
     std::string review;
     int rating;
     int creditPoints;
@@ -38,6 +39,7 @@ public:
     void setUserName(std::string username);
     void setPassword(std::string password);
     void setMyHouse(House *house);
+    void setNumOfHouse(int numOfHouse);
 
     //Getters
     std::string getName();
@@ -45,6 +47,7 @@ public:
     std::string getUsername();
     std::string getPassword();
     House *getMyHouse();
+    int getNumOfHouse();
     void getHouse();
     void getReview();
     int getRating();

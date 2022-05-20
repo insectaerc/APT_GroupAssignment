@@ -85,6 +85,7 @@ void System::loadData(){
         for(int j = 0; j < this->houses.size(); j++) {
             if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
                 this->members[i]->setMyHouse(this->houses[j]);
+                this->members[i]->setNumOfHouse(1);
             }
         }
     }
@@ -180,6 +181,7 @@ void System::guestMenu(){
     string username, password, fullname, phoneNo, tmp;
 
     int choice;
+    bool loop;
     getInput(choice);
     while(1) {
         switch(choice){
@@ -191,7 +193,20 @@ void System::guestMenu(){
             std::getline(std::cin, fullname);
             std::cout << "Enter your phone Number: ";
             std::getline(std::cin, phoneNo);
-            loginInput(&username, &password);
+            loop = 1;
+            while(loop) {
+                loginInput(&username, &password);
+                for(int i = 0; i < members.size(); i++) {
+                    if(username.compare(members[i]->getUsername()) == 0) {
+                        std::cout << "Username already existed!!!\n";
+                        loop = 1;
+                        break;
+                    }
+                    else {
+                        loop = 0;
+                    }
+                }
+            }
 
             //Convert username to lowercase
             username = toLowercase(username);
@@ -203,27 +218,17 @@ void System::guestMenu(){
             newMember->setphoneNo(phoneNo);
 
             this->members.push_back(newMember);
-            //std::cout << appSystem.members.size();
-            //newMember->showInfo();
-
-
-            // //Save info to file
-            // str = username + ", " + password + ", " + fullname + ", " + phoneNo;
-            // myFile.open("member.txt", std::ios::app);
-            // if(myFile.is_open()){
-            //     myFile << "\n" << str;
-            //     myFile.close();
-            // }
-
-            std::cout << "\nRegister Succesfully!!!\n";
-            std::cout << "Press Enter to go to member menu....";
             this->isLoggedInVar = true;
+
             for(int i = 0; i < this->members.size(); i++) {
                 tmp = this->members[i]->getUsername();
                 if(tmp.compare(username) == 0) {
                     this->loggedInMember = members[i];
+                    this->loggedInMember->setNumOfHouse(0);
                 }
             }
+            std::cout << "\nRegister Succesfully!!!\n";
+            std::cout << "Press Enter to go to member menu....";
             std::cin.ignore();
             system("cls");
             this->memberMenu();
@@ -320,41 +325,58 @@ void System::memberMenu(){
         case 1:
             system("cls");
             this->loggedInMember->showInfo();
+            std::cin.ignore();
             this->toMemberMenu();
             break;
         case 2: //Add Houses
+            system("cls");
             std::cin.ignore();
             this->loggedInMember->addHouse(this->houses, this->loggedInMember->getUsername());
+            this->loggedInMember->setMyHouse(houses.back());
+            std::cin.ignore();
             this->toMemberMenu();
             break;
         case 3: //List/Unlist Houses
-            std::cout << "1. List house" << std::endl;
-            std::cout << "2. Unlist house" << std::endl;
-            std::cout << "0. Return to Member menu" << std::endl;
-            std::cout << "\nEnter your choice: ";
-            getInput(list_option);
-            while(1) {
-                switch(list_option) {
-                case 1: //List Function
-                    loggedInMember->list(loggedInMember->getMyHouse());
-                    this->toMemberMenu();
-                    break;
-                case 2: //Unlist Function
-                    loggedInMember->unlist(loggedInMember->getMyHouse());
-                    this->toMemberMenu();
-                    break;
-                case 0: //Return to member menu
-                    system("cls");
-                    this->memberMenu();
-                    break;
-                default:
-                    std::cout << "Invalid Choice. Enter again: ";
-                    getInput(list_option);
+
+            if(this->loggedInMember->getNumOfHouse() == 0) {
+                std::cout << "\nYou do not have a house to list/unlist!!!\n";
+                std::cin.ignore();
+                this->toMemberMenu();
+            }
+            else {
+                this->loggedInMember->showInfo();
+                this->loggedInMember->getMyHouse()->showInfo();
+                std::cout << "1. List house" << std::endl;
+                std::cout << "2. Unlist house" << std::endl;
+                std::cout << "0. Return to Member menu" << std::endl;
+                std::cout << "\nEnter your choice: ";
+                getInput(list_option);
+                while(1) {
+                    switch(list_option) {
+                    case 1: //List Function
+                        this->loggedInMember->list(this->loggedInMember->getMyHouse());
+                        std::cin.ignore();
+                        this->toMemberMenu();
+                        break;
+                    case 2: //Unlist Function
+                        this->loggedInMember->unlist(this->loggedInMember->getMyHouse());
+                        std::cin.ignore();
+                        this->toMemberMenu();
+                        break;
+                    case 0: //Return to member menu
+                        system("cls");
+                        this->memberMenu();
+                        break;
+                    default:
+                        std::cout << "Invalid Choice. Enter again: ";
+                        getInput(list_option);
+                    }
                 }
             }
         case 4: //Search Houses
             system("cls");
             this->showHousesMember();
+            std::cin.ignore();
             this->toMemberMenu();
             break;
         case 5: //Request (will be in search house)
@@ -573,7 +595,6 @@ std::string System::boolto_str(bool boolean){
 
 void System::toMemberMenu() {
     std::cout << "Press Enter to return to member menu....";
-    std::cin.ignore();
     std::cin.ignore();
     system("cls");
     this->memberMenu();
