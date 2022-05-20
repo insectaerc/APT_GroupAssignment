@@ -31,6 +31,7 @@ class System{
         void adminMenu();
         void loginInput(std::string *u, std::string *p);
         bool isLoggedIn(std::string username, std::string password);
+        bool isLoggedInAdmin(std::string username, std::string password);
         std::string toLowercase(std::string str);
         void showHousesGuest();
         void showHousesMember();

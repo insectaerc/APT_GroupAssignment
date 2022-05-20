@@ -292,6 +292,8 @@ void System::memberMenu(){
                     this->loggedInMember = members[i];
                 }
             }
+            system("cls");
+            std::cout << "Logged In Successfully!\n";
             break;
         }
     }
@@ -379,31 +381,38 @@ void System::adminMenu() {
     int choice;
 
     bool loop = 1;
+    bool loop2 = 1;
     while(loop) {
         loginInput(&username, &password);
-        if(this->isLoggedIn(username, password) == false) {
+        if(this->isLoggedInAdmin(username, password) == false) {
             std::cout << "Wrong password or username!!!\n";
-            std::cout << "Return to main menu? (Y/N): ";
+            std::cout << "Return to Main Menu? (Y/N): ";
             char choice;
+            loop2 = 1;
             getInput(choice);
-            switch(choice){
-                case 'Y': case 'y':
-                    this->mainMenu();
-                    loop = 0;
-                    break;
-                case 'N': case 'n':
-                    std::cin.ignore();
-                    break;
-                default:
-                    std::cout << "Invalid Choice. Enter again: ";
-                    getInput(choice);
+            while(loop2) {
+                switch(choice){
+                    case 'Y': case 'y':
+                        this->mainMenu();
+                        break;
+                    case 'N': case 'n':
+                        std::cin.ignore();
+                        loop2 = 0;
+                        break;
+                    default:
+                        std::cout << "\nInvalid Choice. Enter again: ";
+                        getInput(choice);
+                }
             }
-        } else {
+        }
+        else {
+            std::cout << "Logged In Successfully!\n";
+            system("cls");
             break;
         }
     }
 
-    std::cout << "***** ADMIN MENU *****\n\n";
+    std::cout << "\n***** ADMIN MENU *****\n\n";
     std::cout << "1. View Members\n";
     std::cout << "2. View Houses\n";
     std::cout << "0. Return to Main menu\n";
@@ -464,12 +473,26 @@ bool System::isLoggedIn(std::string username, std::string password){
         u = this->members[i]->getUsername();
         p = this->members[i]->getPassword();
         if(username.compare(u) == 0 && password.compare(p) == 0) {
-            std::cout << "Logged In Successfully!\n";
             return true;
         } 
         else {
             continue;
         }
+    }
+    return false;
+}
+
+bool System::isLoggedInAdmin(std::string username, std::string password){
+    std::string u, p; //Correct username and password
+
+    //Convert username to lowercase
+    username = toLowercase(username);
+
+    //Validation
+    u = "admin";
+    p = "admin";
+    if(username.compare(u) == 0 && password.compare(p) == 0) {
+        return true;
     }
     return false;
 }
