@@ -14,6 +14,7 @@ class House{
         std::string review;
         bool availability;
         Member* occupier;
+        std::string occupierUsername;   //This is used when load data for Member::occupyingHouse attribute
         int numOfOccupier;
     public:
         std::string owner;
@@ -25,7 +26,7 @@ class House{
         //This constructor is called is Member::addHouse
         House(std::string owner, std::string location, std::string description, bool availability);
         //This constructor is called in System::loadData
-        House(std::string owner, std::string location, std::string description, bool availability, int creditPoints, int reqRating, int rating, int numOfOccupier);
+        House(std::string owner, std::string location, std::string description, bool availability, int creditPoints, int reqRating, int rating, std::string review, int numOfOccupier, std::string occupierUsername);
 
         void showInfo();
         void showAvailability();
@@ -37,6 +38,7 @@ class House{
         void setReview(std::string review);
         void setOccupier(Member *occupier);
         void setNumOfOccupier(int num);
+        void setOccupierUsername(std::string occupierUsername);
 
         //Getters
         bool getAvailability();
@@ -45,6 +47,7 @@ class House{
         std::string getReview();
         Member *getOccupier();
         int getNumOfOccupier();
+        std::string getOccupierUsername();
 };
 
 #endif

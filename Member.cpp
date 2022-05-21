@@ -1,5 +1,6 @@
 #include "Member.h"
 #include "House.h"
+#include "Review.h"
 #include "Input.h"
 #include <iostream>
 #include <string.h>
@@ -53,7 +54,6 @@ void Member::addHouse(std::vector<House*> &houses, std::string username) {
     }
 }
 
-
 void Member::list(House *myHouse) {
     if(myHouse->getAvailability() == 0) {
         myHouse->setAvailability(1);
@@ -106,18 +106,23 @@ void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice,
 
 bool Member::viewRequests() {
     system("cls");
-    int numOfReq = 0;
-    std::cout << "List of all requests to your listed house:\n\n";
-    for(int i = 0; i < this->myRequests.size(); i++){
-        numOfReq++;
-        std::cout << i+1 << ". ";
-        std::cout << "Requester's username: " << this->myRequests[i]->getOccupierUsername();
-        std::cout << " ------------- Status: " << this->myRequests[i]->getStatus() << "\n";
-    }
-    if(numOfReq == 0){
-        std::cout << "\nThere is no request to show for now.\n";
+    if(this->myHouse->getAvailability() == true){
+        int numOfReq = 0;
+        std::cout << "List of all requests to your listed house:\n\n";
+        for(int i = 0; i < this->myRequests.size(); i++){
+            numOfReq++;
+            std::cout << i+1 << ". ";
+            std::cout << "Requester's username: " << this->myRequests[i]->getOccupierUsername();
+            std::cout << " ------------- Status: " << this->myRequests[i]->getStatus() << "\n";
+        }
+        if(numOfReq == 0){
+            std::cout << "\nThere is no request to show for now.\n";
+            return false;
+        }else{return true;}
+    }else{
+        std::cout << "Sorry, your house has not been available yet, cannot see requests for now.\n";
         return false;
-    }else{return true;}
+    }
 }
 
 std::string Member::acceptRequest(int requestChoice){
@@ -137,10 +142,17 @@ std::string Member::acceptRequest(int requestChoice){
 
 void Member::showInfo() {
     std::cout << "--------------MEMBER INFORMATION--------------\n";
-    std::cout << "Full Name: " << this->fullname + "\n" 
-            << "Phone Number: " << this->phoneNo + "\n"
-            << "Credit Point: " << this->creditPoints << "\n"
-            << "Rating: " << this->rating << "\n";
+    std::cout << "_Full Name: " << this->fullname + "\n" 
+            << "_Phone Number: " << this->phoneNo + "\n"
+            << "_Credit Point: " << this->creditPoints << "\n"
+            << "_Rating: " << this->rating << "\n"
+            << "_Review: \n";
+    for (Review *eachReview : this->myReviews){
+        if(eachReview->getType().compare("occupier") == 0){
+            std::cout << "+Review from: " << eachReview->getWriterUsername();
+            std::cout << ", content: " << eachReview->getContent() << "\n";
+        }
+    }
 }
 
 //Setters
@@ -190,6 +202,9 @@ int Member::getCreditPts() {
 }
 int Member::getRating() {
     return this->rating;
+}
+std::vector<Review*> &Member::getMyReview(){
+    return this->myReviews;
 }
 House *Member::getMyHouse() {
     return this->myHouse;

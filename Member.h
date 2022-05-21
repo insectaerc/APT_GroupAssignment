@@ -5,6 +5,7 @@
 
 #include "House.h"
 #include "Request.h"
+#include "Review.h"
 #include <vector>
 
 class House; //Forward declaration
@@ -15,14 +16,15 @@ private:
     std::string password;
     std::string fullname;
     std::string phoneNo;
-    House *myHouse;
-    std::vector<Request*> myRequests;
-    int numOfHouse;
-    std::string review;
-    int rating;
     int creditPoints;
+    int rating;
+    std::vector<Request*> myRequests;
+    std::vector<Review*> myReviews;
+
+    House *myHouse;
     House *occuppyingHouse;
-    int numOfOccupyHouse;
+    int numOfHouse;
+    bool numOfOccupyHouse;
 public:
     //Constructor
     Member();
@@ -47,6 +49,7 @@ public:
     void setPassword(std::string password);
     void setMyHouse(House *house);
     void setRating(int rating);
+    void setReview(Review *review);
     void setNumOfHouse(int numOfHouse);
     void setOccupyingHouse(House *occupyingHouse);
     void setNumOfOccupyHouse(int numOfOccupyHouse);
@@ -58,6 +61,7 @@ public:
     std::string getPassword();
     House *getMyHouse();
     std::vector<Request*> &getMyRequest();
+    std::vector<Review*> &getMyReview();
     int getNumOfHouse();
     int getRating();
     int getCreditPts();

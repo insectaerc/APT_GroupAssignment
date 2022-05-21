@@ -14,18 +14,21 @@ void System::loadData(){
     std::string className;  // -> To detemine which class that the data in the file belongs to
 
     //Variables for storing data belong to Members
-    std::string username, password, fullname, phoneNumber;
+    std::string username, password, fullname, phoneNumber, memReview;
     int creditPoints, memRating, numOfOccupyingHouse;
     //Variables for storing data belong to Houses
-    std::string houseOwner, location, description;
+    std::string houseOwner, location, description, houseReview, houseOccupierUsername;
     int houseRating, reqCrePoints, reqRating, numOfOccupier;
     bool availability;
     //Variables for storing data belong to Requests
     std::string ownerUsername, occupierUsername, requestStatus;
+    //Variables for storing data belong to Reviews
+    std::string reviewType, reviewReceiverUsername, reviewWriterUsername, reviewContent;
     //Variables to manage the number of attributes of each object
     int numOfMemberValue = 0;
     int numOfHouseValue = 0;
     int numOfRequestValue = 0;
+    int numOfReviewValue = 0;
 
     while(getline(myFile, tempStr, '|')){
         //Remove new line character \n from tempStr
@@ -39,6 +42,9 @@ void System::loadData(){
             continue;
         }else if (tempStr == "Request"){
             className = "Request";
+            continue;
+        }else if (tempStr == "Review"){
+            className = "Review";
             continue;
         }
         
@@ -57,7 +63,6 @@ void System::loadData(){
                 numOfMemberValue = 0;
                 continue;
             };
-            
         }else if (className == "House"){
             numOfHouseValue++;
             if(numOfHouseValue == 1) {houseOwner = tempStr; continue;};
@@ -67,14 +72,15 @@ void System::loadData(){
             if(numOfHouseValue == 5) {reqCrePoints = std::stoi(tempStr); continue;};
             if(numOfHouseValue == 6) {reqRating = std::stoi(tempStr); continue;};
             if(numOfHouseValue == 7) {houseRating = std::stoi(tempStr);  continue;};
-            if(numOfHouseValue == 8){
-                numOfOccupier = std::stoi(tempStr); 
-                House *house = new House(houseOwner, location, description, availability, reqCrePoints, reqRating, houseRating, numOfOccupier);
+            if(numOfHouseValue == 8) {houseReview = tempStr; continue;}
+            if(numOfHouseValue == 9) {numOfOccupier = std::stoi(tempStr); continue;};
+            if(numOfHouseValue == 10){
+                houseOccupierUsername = tempStr;
+                House *house = new House(houseOwner, location, description, availability, reqCrePoints, reqRating, houseRating, houseReview, numOfOccupier, houseOccupierUsername);
                 this->houses.push_back(house);
                 numOfHouseValue = 0;
                 continue;
             };
-
         }else if(className == "Request"){
             numOfRequestValue++;
             if(numOfRequestValue == 1) {ownerUsername = tempStr; continue;};
@@ -82,27 +88,21 @@ void System::loadData(){
             if(numOfRequestValue == 3) {
                 requestStatus = tempStr;
                 Request *request = new Request(ownerUsername, occupierUsername, requestStatus);
-                if(requestStatus.compare("Accepted") == 0) {
-                    std::cout << "Accepted\n";
-                    for(int i = 0; i < members.size(); i++) {
-                        if(ownerUsername.compare(members[i]) == 0) {Member *owner = members[i];}
-                        if(occupierUsername.compare(members[i]) == 0) {Member *occupier = members[i]}
-
-                    }
-                }
                 this->requests.push_back(request);
                 numOfRequestValue = 0;
                 continue;
             };
-        }
-    }
-
-    //Load houses to myHouse
-    for(int i = 0; i < this->members.size(); i++) {
-        for(int j = 0; j < this->houses.size(); j++) {
-            if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
-                this->members[i]->setMyHouse(this->houses[j]);
-                this->members[i]->setNumOfHouse(1);
+        }else if(className == "Review"){
+            numOfReviewValue++;
+            if(numOfReviewValue == 1){reviewType = tempStr; continue;}
+            if(numOfReviewValue == 2){reviewReceiverUsername = tempStr; continue;}
+            if(numOfReviewValue == 3){reviewWriterUsername = tempStr; continue;}
+            if(numOfReviewValue == 4){
+                reviewContent = tempStr;
+                Review *review = new Review(reviewType, reviewReceiverUsername, reviewWriterUsername, reviewContent);
+                this->reviews.push_back(review);
+                numOfReviewValue = 0;
+                continue;
             }
         }
     }
@@ -138,7 +138,7 @@ void System::saveData(){
         newFile << tmp << "|" << houses[i]->location << "|";
         newFile << houses[i]->description << "|" << boolto_str(houses[i]->getAvailability()) << "|";
         newFile << houses[i]->requiredCreditPoints << "|" << houses[i]->requiredRating << "|";
-        newFile << houses[i]->getRating() << "|" << houses[i]->getNumOfOccupier() << "|";
+        newFile << houses[i]->getRating() << "|" << houses[i]->getReview() << "|" << houses[i]->getNumOfOccupier() << "|" << houses[i]->getOccupierUsername() << "|";
     }
     //Save data of Requests
     newFile << "\nRequest|";
@@ -319,8 +319,30 @@ void System::memberMenu(){
                     this->loggedInMember->getMyRequest().push_back(eachReq);
                 }
             }
-            system("cls");
+            //Load data to myHouse
+            for(int i = 0; i < this->members.size(); i++) {
+                for(int j = 0; j < this->houses.size(); j++) {
+                    if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
+                        this->members[i]->setMyHouse(this->houses[j]);
+                        this->members[i]->setNumOfHouse(1);
+                    }
+                }
+            }
+            //Load occupying house
+            for(int i = 0; i < this->houses.size(); i++){
+                if(this->houses[i]->getOccupierUsername().compare(this->loggedInMember->getUsername()) == 0){
+                    this->loggedInMember->setOccupyingHouse(this->houses[i]);
+                }
+            }
+            //Load reviews of user
+            for(int i = 0; i < this->reviews.size(); i++){
+                if(this->reviews[i]->getReceiverUsername().compare(this->loggedInMember->getUsername()) == 0){
+                    this->loggedInMember->getMyReview().push_back(this->reviews[i]);
+                }
+            }
+
             std::cout << "Logged In Successfully!\n";
+
             break;
         }
     }
@@ -343,7 +365,6 @@ void System::memberMenu(){
     int rating_option;
     int rating;
     std::string review;
-    std::string occupierUsername;
     while(1) {
         switch(getInput(choice)){
         case 1:
@@ -419,17 +440,22 @@ void System::memberMenu(){
                     system("cls");
                     this->memberMenu();
                 }else{
-                    //this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                    //Accept
+                    //acceptRequest() updates the status of the request from "Pending" to "Accepted"
+                    //and returns the name of the occupier
+                    std::string occupierUsername;
                     occupierUsername = this->loggedInMember->acceptRequest(requestChoice);
+                    
+                    //Update infomation
                     for(int i = 0; i < this->members.size(); i++) {
                         if(occupierUsername.compare(this->members[i]->getUsername()) == 0) {
+                            //Update requester's occupying house to the house of the owner (the current user)
                             this->members[i]->setOccupyingHouse(this->loggedInMember->getMyHouse());
+                            //Update owner's information
                             this->loggedInMember->getMyHouse()->setOccupier(members[i]);
+                            this->loggedInMember->getMyHouse()->setOccupierUsername(occupierUsername);
                         }
                     }
-                    //loginmem->myHouse->setOccupier(requester)
-                    //Requester->setocchouse(logimem->myHouse) 
-                    //requester.setOChouse;
                     std::cin.ignore();
                     this->toMemberMenu();
                 }
@@ -438,14 +464,15 @@ void System::memberMenu(){
         case 6: //Rating
             system("cls");
             std::cout << "\n***** RATING MENU *****\n";
-            std::cout << "1. House\n";
-            std::cout << "2. Occupier\n";
-            std::cout << "0. Return to member menu\n";
+            std::cout << "1. Rate your most recent occupied house\n";
+            std::cout << "2. Rate your most recent occupier\n";
+            std::cout << "0. Return to main menu\n";
             std::cout << "\nEnter your choice: ";
+            Review *newReview;
             switch(getInput(rating_option)) {
                 case 1: //House Rating
                 if(this->loggedInMember->getNumOfOccupyHouse() == 0) {
-                    std::cout << "You are not occupying a house\n";
+                    std::cout << "You are not occupying any house to which you can give a review.\n";
                     std::cin.ignore();
                     this->toMemberMenu();
                 }
@@ -454,10 +481,10 @@ void System::memberMenu(){
                     getInput(rating);
                     this->loggedInMember->getOcuppyingHouse()->setRating(rating);
                     std::cout << "Enter you review: ";
+                    std::cin.ignore();
                     std::getline(std::cin, review);
                     this->loggedInMember->getOcuppyingHouse()->setReview(review);
-                    std::cout << "Rating: " << this->loggedInMember->getOcuppyingHouse()->getRating() << std::endl;
-                    std::cout << "Review: " << this->loggedInMember->getOcuppyingHouse()->getReview() << std::endl;
+                    std::cout << "\nSuccessfully rated!\n";
                     this->toMemberMenu();
                     break;
                 }
@@ -465,7 +492,12 @@ void System::memberMenu(){
                     std::cout << "\nEnter your rating (-10 to 10): ";
                     getInput(rating);
                     this->loggedInMember->getMyHouse()->getOccupier()->setRating(rating);
+                    std::cout << "Enter you review: ";
                     std::cin.ignore();
+                    std::getline(std::cin, review);
+                    newReview=  new Review("occupier", this->loggedInMember->getMyHouse()->getOccupierUsername(), this->loggedInMember->getUsername(), review);
+                    this->reviews.push_back(newReview);
+                    std::cout << "\nSuccessfully rated!\n";
                     this->toMemberMenu();
                     break;
                 case 0: //Return
@@ -780,7 +812,7 @@ std::string System::boolto_str(bool boolean){
 }
 
 void System::toMemberMenu() {
-    std::cout << "Press Enter to return to member menu....";
+    std::cout << "Press Enter to return to main menu....";
     std::cin.ignore();
     system("cls");
     this->memberMenu();
