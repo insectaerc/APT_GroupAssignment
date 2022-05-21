@@ -4,6 +4,7 @@
 // #define MEMBER_H
 
 #include "House.h"
+#include "Request.h"
 #include <iostream>
 #include <vector>
 
@@ -14,6 +15,7 @@ private:
     std::string fullname;
     std::string phoneNo;
     House *myHouse;
+    std::vector<Request*> myRequests;
     int numOfHouse;
     std::string review;
     int rating;
@@ -30,8 +32,11 @@ public:
     void addHouse(std::vector<House*> &houses, std::string username);
     void list(House *myHouse);
     void unlist(House *myHouse);
-    void request();
-    void viewRequests();
+    bool searchHouses(std::string cityName, std::vector<House*> houses, std::vector<House*> &availableHouses);
+    void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests);
+    bool viewRequests();
+    void acceptRequest(int requestChoice);
+    void showInfo();
 
     //Setters
     void setName(std::string name);
@@ -47,6 +52,7 @@ public:
     std::string getUsername();
     std::string getPassword();
     House *getMyHouse();
+    std::vector<Request*> &getMyRequest();
     int getNumOfHouse();
     void getHouse();
     void getReview();
@@ -54,7 +60,6 @@ public:
     int getCreditPts();
     void getocuppyingHouse();
 
-    void showInfo();
 };
 
 //#endif

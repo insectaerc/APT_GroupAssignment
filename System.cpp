@@ -1,32 +1,46 @@
 #include "System.h"
-#include "Input.h"
 
 //Constructor
 System::System(){this->isLoggedInVar = false;}
 
 //Functions
 void System::loadData(){
+    //Fstream object to read file
     std::fstream myFile;
     myFile.open("data.txt", std::ios::in);
     std::string tempStr;
-    std::string className;
+
+    //Variables
+    std::string className;  // -> To detemine which class that the data in the file belongs to
+
+    //Variables for storing data belong to Members
     std::string username, password, fullname, phoneNumber;
     int creditPoints, memRating;
+    //Variables for storing data belong to Houses
     std::string houseOwner, location, description;
     int houseRating, reqCrePoints, reqRating;
     bool availability;
+    //Variables for storing data belong to Requests
+    std::string ownerUsername, occupierUsername, requestStatus;
+    //Variables to manage the number of attributes of each object
     int numOfMemberValue = 0;
     int numOfHouseValue = 0;
+    int numOfRequestValue = 0;
+
     while(getline(myFile, tempStr, '|')){
+        //Remove new line character \n from tempStr
+        tempStr.erase(remove(tempStr.begin(), tempStr.end(), '\n'), tempStr.end());
+
         if(tempStr == "Member"){
             className = "Member";
             continue;
-        }else if (tempStr == "\nHouse"){
+        }else if (tempStr == "House"){
             className = "House";
             continue;
+        }else if (tempStr == "Request"){
+            className = "Request";
+            continue;
         }
-        //Remove new line character \n from tempStr
-        tempStr.erase(remove(tempStr.begin(), tempStr.end(), '\n'), tempStr.end());
         
         if(className == "Member"){
             numOfMemberValue++;
@@ -46,25 +60,7 @@ void System::loadData(){
         }else if (className == "House"){
             numOfHouseValue++;
             if(numOfHouseValue == 1) {houseOwner = tempStr; continue;};
-            if(numOfHouseValue == 2) {
-                //Save locations to system for later use of showing members houses based on locations
-                location = tempStr;
-                if(this->locations.size() == 0){
-                    this->locations.push_back(location);
-                }
-                bool locationAlreadySaved = false;       //Save decision is based on this variable
-                for(std::string eachLocation : this->locations){ //With each location, we'll loop through the locations list, and compare
-                    if(location == eachLocation){   // If location is found, no save
-                        locationAlreadySaved = true;
-                        break;
-                    }else{
-                        continue;  //Else, go to the next location of the locations list to check
-                    }
-                }
-                if(locationAlreadySaved == false){ //At the end of the loop, if no location is found being similar, save
-                    this->locations.push_back(location);
-                }
-            };
+            if(numOfHouseValue == 2) {location = tempStr; continue;};
             if(numOfHouseValue == 3) {description = tempStr; continue;};
             if(numOfHouseValue == 4) {availability = strto_bool(tempStr); continue;};
             if(numOfHouseValue == 5) {reqCrePoints = std::stoi(tempStr); continue;};
@@ -76,8 +72,19 @@ void System::loadData(){
                 numOfHouseValue = 0;
                 continue;
             };
-        }
 
+        }else if(className == "Request"){
+            numOfRequestValue++;
+            if(numOfRequestValue == 1) {ownerUsername = tempStr; continue;};
+            if(numOfRequestValue == 2) {occupierUsername = tempStr; continue;};
+            if(numOfRequestValue == 3) {
+                requestStatus = tempStr;
+                Request *request = new Request(ownerUsername, occupierUsername, requestStatus);
+                this->requests.push_back(request);
+                numOfRequestValue = 0;
+                continue;
+            };
+        }
     }
 
     //Load houses to myHouse
@@ -95,29 +102,26 @@ void System::loadData(){
 void System::saveData(){
     std::cout << "Saving Data...." << std::endl;
 
-    //std::ifstream myFile;
+    //ofstream object to read file
     std::ofstream newFile;
-    //myFile.open("data.txt", std::ios::in);
     newFile.open("data.txt", std::ios::out);
 
     std::vector<Member*> members;
     std::vector<House*> houses;
-
     members = this->members;
     houses = this->houses;
-    newFile << "Member|";
-
     std::string tmp;
     
+    //Save data of Members
+    newFile << "Member|";
     for(int i = 0; i < members.size(); i++) {
         tmp = "\n" + members[i]->getUsername();
         newFile << tmp << "|" << members[i]->getPassword() << "|";
         newFile << members[i]->getName() << "|" << members[i]->getphoneNo() << "|";
         newFile << members[i]->getCreditPts() << "|" << members[i]->getRating() << "|";
     }
-
+    //Save data of Houses
     newFile << "\nHouse|";
-
     for(int i = 0; i < houses.size(); i++) {
         tmp = "\n" + houses[i]->owner;
         newFile << tmp << "|" << houses[i]->location << "|";
@@ -125,6 +129,14 @@ void System::saveData(){
         newFile << houses[i]->requiredCreditPoints << "|" << houses[i]->requiredRating << "|";
         newFile << houses[i]->getRating() << "|";
     }
+    //Save data of Requests
+    newFile << "\nRequest|";
+    for(int i = 0; i < this->requests.size(); i++) {
+        newFile <<  "\n" + this->requests[i]->getOwnerUsername() << "|" 
+                << this->requests[i]->getOccupierUsername() << "|"
+                << this->requests[i]->getStatus() << "|";
+    }
+    
     newFile.close();
 }
 
@@ -292,6 +304,12 @@ void System::memberMenu(){
                     this->loggedInMember = members[i];
                 }
             }
+            //Load requests to logged-in Member object
+            for(Request *eachReq : this->requests){
+                if(eachReq->getOwnerUsername() == this->loggedInMember->getUsername()){
+                    this->loggedInMember->getMyRequest().push_back(eachReq);
+                }
+            }
             system("cls");
             std::cout << "Logged In Successfully!\n";
             break;
@@ -306,10 +324,9 @@ void System::memberMenu(){
     std::cout << "2. Add House\n";
     std::cout << "3. List/Unlist House\n";
     std::cout << "4. Search Houses\n";
-    std::cout << "5. Request House\n";
-    std::cout << "6. View Requests\n";
-    std::cout << "7. Rating\n";
-    std::cout << "0. Return to Main menu\n";
+    std::cout << "5. View Requests\n";
+    std::cout << "6. Rating\n";
+    std::cout << "0. Log Out\n";
     std::cout << "\nEnter your choice: ";
     
     int choice;
@@ -319,6 +336,7 @@ void System::memberMenu(){
         case 1:
             system("cls");
             this->loggedInMember->showInfo();
+            std::cout << std::endl << std::endl;
             std::cin.ignore();
             this->toMemberMenu();
             break;
@@ -367,17 +385,36 @@ void System::memberMenu(){
                     }
                 }
             }
-        case 4: //Search Houses
+        case 4: //Show houses to member based on cities
             system("cls");
             this->showHousesMember();
             std::cin.ignore();
             this->toMemberMenu();
             break;
-        case 5: //Request (will be in search house)
+        case 5: //View requests
+            if(this->loggedInMember->viewRequests() == false){
+                std::cout << "\n\nPress Enter to return to main menu.";
+                std::cin.ignore();
+                std::cin.ignore();
+                system("cls");
+                this->memberMenu();
+            }else{
+                int requestChoice;
+                std::cout << "\nSelect the request that you wish to accept, if you want go back to main menu please enter 0: ";
+                getInput(requestChoice);
+                if(requestChoice == 0){
+                    this->memberMenu();
+                }else{
+                    //this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                    this->loggedInMember->acceptRequest(requestChoice);
+                    std::cout << "Press Enter to return to main menu.";
+                    std::cin.ignore();
+                    std::cin.ignore();
+                    this->memberMenu();
+                }
+            }
             break;
-        case 6: //View requests
-            break;
-        case 7: //Rating
+        case 6: //Rating
             break;
         case 0:
             system("cls");
@@ -434,10 +471,20 @@ void System::adminMenu() {
     while(1) {
         switch(getInput(choice)){
         case 1: //View Members information
+            system("cls");
             this->showMembersAdmin();
+            std::cout << "\nPress enter to return to main menu....\n";
+            std::cin.ignore();
+            std::cin.ignore();
+            this->mainMenu();
             break;
         case 2: //View Houses information
+            system("cls");
             this->showHousesAdmin();
+            std::cout << "\nPress enter to return to main menu....\n";
+            std::cin.ignore();
+            std::cin.ignore();
+            this->mainMenu();
             break;
         case 0:
             system("cls");
@@ -450,6 +497,7 @@ void System::adminMenu() {
 }
 
 void System::loginInput(std::string *u, std::string *p){
+    std::cout << "--------------LOGIN--------------\n";
     while(1) {
         std::cout << "Enter username: ";
         std::getline(std::cin, *u);
@@ -494,18 +542,24 @@ bool System::isLoggedIn(std::string username, std::string password){
 }
 
 bool System::isLoggedInAdmin(std::string username, std::string password){
-    std::string u, p; //Correct username and password
+    std::string u, p; // Correct username and password for admin
 
     //Convert username to lowercase
     username = toLowercase(username);
 
-    //Validation
+    //Predefined admin username and password
     u = "admin";
-    p = "admin";
+    p = "admin123";
+
+    //Validation
     if(username.compare(u) == 0 && password.compare(p) == 0) {
+        std::cout << "\nAdmin logged in successfully!\n";
         return true;
     }
-    return false;
+    else {
+        return false;
+  
+    }
 }
 
 std::string System::toLowercase(std::string str){
@@ -622,10 +676,8 @@ void System::showHousesMember(){
                 break;
             default:
                 std::cout << "Invalid Choice. Enter again: ";
-                break;
         }
-        std::cout << std::endl;
-    };
+    }
 }
 
 void System::showMembersAdmin(){

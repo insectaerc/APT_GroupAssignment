@@ -21,7 +21,9 @@ House::House(std::string owner, std::string location, std::string description, b
 }
 
 void House::showInfo() {
-    std::cout << "Owner: " << this->owner << ", location: " << this->location << ", description: " << this->description << ", minimum credit points: " << this->requiredCreditPoints << ", minimum rating: " << this->rating <<"\n";
+    std::cout << "Owner: " << this->owner << ", location: " << this->location << ", description: "
+    << this->description << ", minimum credit points: " << this->requiredCreditPoints << ", minimum rating: "
+    << this->rating <<"\n";
 }
 
 void House::showAvailability() {
@@ -42,4 +44,7 @@ bool House::getAvailability() {
 }
 int House::getRating(){
     return this->rating;
+}
+std::string House::getOwnerUsername(){
+    return this->owner;
 }
