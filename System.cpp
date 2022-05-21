@@ -138,9 +138,8 @@ void System::mainMenu(){
     std::cout << "\nEnter your choice: ";
     bool loop = 1;
     int choice;
-    getInput(choice);
     while(1) {
-        switch(choice){
+        switch(getInput(choice)){
         case 1:
             //Guest Options Menu
             this->guestMenu();
@@ -163,7 +162,6 @@ void System::mainMenu(){
             exit(0);
         default:
             std::cout << "Invalid Choice. Enter again: ";
-            getInput(choice);
         }
     }
 }
@@ -182,9 +180,8 @@ void System::guestMenu(){
 
     int choice;
     bool loop;
-    getInput(choice);
     while(1) {
-        switch(choice){
+        switch(getInput(choice)){
         case 1: //Register Menu
             std::cin.ignore();
             system("cls");
@@ -239,6 +236,7 @@ void System::guestMenu(){
             this->showHousesGuest();
             std::cout << "Press Enter to return to main menu....";
             std::cin.ignore();
+            system("cls");
             this->mainMenu();
             break;
         case 0:
@@ -248,7 +246,6 @@ void System::guestMenu(){
             break;
         default:
             std::cout << "Invalid Choice. Enter again: ";
-            getInput(choice);
         }
     }
 }
@@ -272,9 +269,8 @@ void System::memberMenu(){
             std::cout << "Return to Main Menu? (Y/N): ";
             char choice;
             loop2 = 1;
-            getInput(choice);
             while(loop2) {
-                switch(choice){
+                switch(getInput(choice)){
                     case 'Y': case 'y':
                         this->mainMenu();
                         break;
@@ -284,7 +280,6 @@ void System::memberMenu(){
                         break;
                     default:
                         std::cout << "\nInvalid Choice. Enter again: ";
-                        getInput(choice);
                 }
             }
         }
@@ -319,9 +314,8 @@ void System::memberMenu(){
     
     int choice;
     int list_option;
-    getInput(choice);
     while(1) {
-        switch(choice){
+        switch(getInput(choice)){
         case 1:
             system("cls");
             this->loggedInMember->showInfo();
@@ -391,7 +385,6 @@ void System::memberMenu(){
             break;
         default:
             std::cout << "Invalid Choice. Enter again: ";
-            getInput(choice);
         }
     }
 }
@@ -411,9 +404,8 @@ void System::adminMenu() {
             std::cout << "Return to Main Menu? (Y/N): ";
             char choice;
             loop2 = 1;
-            getInput(choice);
             while(loop2) {
-                switch(choice){
+                switch(getInput(choice)){
                     case 'Y': case 'y':
                         this->mainMenu();
                         break;
@@ -423,7 +415,6 @@ void System::adminMenu() {
                         break;
                     default:
                         std::cout << "\nInvalid Choice. Enter again: ";
-                        getInput(choice);
                 }
             }
         }
@@ -440,9 +431,8 @@ void System::adminMenu() {
     std::cout << "0. Return to Main menu\n";
     std::cout << "\nEnter your choice: ";
 
-    getInput(choice);
     while(1) {
-        switch(choice){
+        switch(getInput(choice)){
         case 1: //View Members information
             this->showMembersAdmin();
             break;
@@ -455,7 +445,6 @@ void System::adminMenu() {
             break;
         default:
             std::cout << "Invalid Choice. Enter again: ";
-            getInput(choice);
         }
     }
 }
@@ -535,20 +524,105 @@ void System::showHousesGuest(){
         std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
         << "Description: " << eachHouse->description << "\n";
     }
+    std::cout << std::endl;
 }
 
 void System::showHousesMember(){
-    //This assumes that our app only supports Hanoi, Dalat, and Danang cities
-    std::cout << "Suitable houses for you: \n";
-    int order = 1;
-    for(std::string eachLocation : this->locations){
-        std::cout << eachLocation << std::endl;
-        for(int i = 0; i < this->houses.size(); i++){
-            if(eachLocation == this->houses[i]->location && this->loggedInMember->getCreditPts() >= this->houses[i]->requiredCreditPoints && this->loggedInMember->getRating() >= this->houses[i]->requiredRating){
-                std::cout << order << ". ";
-                this->houses[i]->showInfo();
-                order++;
-            }
+    int city_option;
+    int choice;
+    bool loop = true;
+    std::cout << "The application only supports the below cities for now:\n";
+    std::cout << "1. Hanoi" << std::endl;
+    std::cout << "2. Saigon" << std::endl;
+    std::cout << "3. Da Nang" << std::endl;
+    std::cout << "0. Return to main menu" << std::endl << std::endl;
+    std::cout << "\nYour option: ";
+    while(loop){
+        switch (getInput(city_option)){
+            case 1:{
+                std::vector<House*> availableHouses;
+                if(this->loggedInMember->searchHouses("Hanoi", this->houses, availableHouses) == false){
+                    std::cout << "\n";
+                    std::cout << "So sorry, there is no house that is suitable for you right now.\n";
+                    std::cout << "Press Enter to return and select another city.";
+                    std::cin.ignore();
+                    std::cin.ignore();
+                    system("cls");
+                    this->showHousesMember();
+                }else{
+                    int occupyChoice;
+                    std::cout << "\nSelect the house that you wish to occupy, if you want go back to main menu please enter 0: ";
+                    getInput(occupyChoice);
+                    if(occupyChoice == 0){
+                        this->memberMenu();
+                    }else{
+                        this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                        std::cout << "Press Enter to return to main menu.";
+                        std::cin.ignore();
+                        std::cin.ignore();
+                        this->memberMenu();
+                    }
+                }}
+                break;
+            case 2:
+                {
+                std::vector<House*> availableHouses;
+                if(this->loggedInMember->searchHouses("Saigon", this->houses, availableHouses) == false){
+                    std::cout << "\n";
+                    std::cout << "So sorry, there is no house that is suitable for you right now.\n";
+                    std::cout << "Press Enter to return and select another city.";
+                    std::cin.ignore();
+                    std::cin.ignore();
+                    system("cls");
+                    this->showHousesMember();
+                }else{
+                    int occupyChoice;
+                    std::cout << "\nSelect the house that you wish to occupy, if you want go back to main menu please enter 0: ";
+                    getInput(occupyChoice);
+                    if(occupyChoice == 0){
+                        this->memberMenu();
+                    }else{
+                        this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                        std::cout << "Press Enter to return to main menu.";
+                        std::cin.ignore();
+                        std::cin.ignore();
+                        this->memberMenu();
+                    }
+                }}
+                break;
+            case 3:
+                {
+                std::vector<House*> availableHouses;
+                if(this->loggedInMember->searchHouses("Da Nang", this->houses, availableHouses) == false){
+                    std::cout << "\n";
+                    std::cout << "So sorry, there is no house that is suitable for you right now.\n";
+                    std::cout << "Press Enter to return and select another city.";
+                    std::cin.ignore();
+                    std::cin.ignore();
+                    system("cls");
+                    this->showHousesMember();
+                }else{
+                    int occupyChoice;
+                    std::cout << "\nSelect the house that you wish to occupy, if you want go back to main menu please enter 0: ";
+                    getInput(occupyChoice);
+                    if(occupyChoice == 0){
+                        this->memberMenu();
+                    }else{
+                        this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
+                        std::cout << "Press Enter to return to main menu.";
+                        std::cin.ignore();
+                        std::cin.ignore();
+                        this->memberMenu();
+                    }
+                }}
+                break;
+            case 0:
+                system("cls");
+                this->memberMenu();
+                break;
+            default:
+                std::cout << "Invalid Choice. Enter again: ";
+                break;
         }
         std::cout << std::endl;
     };
