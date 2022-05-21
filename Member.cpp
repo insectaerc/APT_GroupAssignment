@@ -1,4 +1,5 @@
 #include "Member.h"
+#include "House.h"
 #include "Input.h"
 #include <iostream>
 #include <string.h>
@@ -19,15 +20,15 @@ Member::Member(std::string username, std::string password, std::string fullname,
     this->creditPoints = 500;
     this->rating = 0;
 }
-Member::Member(std::string username, std::string password, std::string fullname, std::string phoneNumber, int creditPoints, int rating){    //This constructor is called in System::loadData
+Member::Member(std::string username, std::string password, std::string fullname, std::string phoneNumber, int creditPoints, int rating, int numOfOccupyHouse){    //This constructor is called in System::loadData
     this->username = username;
     this->password = password;
     this->fullname = fullname;
     this->phoneNo = phoneNumber;
     this->creditPoints = creditPoints;
     this->rating = rating;
+    this->numOfOccupyHouse = numOfOccupyHouse;
 }
-
 
 //Functions
 void Member::addHouse(std::vector<House*> &houses, std::string username) {
@@ -78,7 +79,7 @@ bool Member::searchHouses(std::string city, std::vector<House*> houses, std::vec
     std::cout << "You selected " << city << " city. Available houses in " << city << " city:\n\n";
     int order = 0;
     for(int i = 0; i < houses.size(); i++){
-        if( city == houses[i]->location && 
+        if( city.compare(houses[i]->location) == 0 && 
             this->creditPoints >= houses[i]->requiredCreditPoints &&
             this->rating >= houses[i]->requiredRating){
             std::cout << order + 1 << ". ";
@@ -129,7 +130,7 @@ void Member::acceptRequest(int requestChoice){
             this->myRequests[i]->setStatus("Rejected");
         }
     }
-    std::cout << "\nYou've successfully accepted the request of the member with username is ";
+    std::cout << "\nYou've successfully accepted the request of the member with username: ";
     std::cout << acceptedReq->getOccupierUsername() << ".\n";
 }
 
@@ -139,6 +140,32 @@ void Member::showInfo() {
             << "Phone Number: " << this->phoneNo + "\n"
             << "Credit Point: " << this->creditPoints << "\n"
             << "Rating: " << this->rating << "\n";
+}
+
+//Setters
+void Member::setName(std::string fullname) {
+    this->fullname = fullname;
+}
+void Member::setphoneNo(std::string phoneNo) {
+    this->phoneNo = phoneNo;
+}
+void Member::setUserName(std::string username){
+    this->username= username;
+};
+void Member::setPassword(std::string password){
+    this->password= password;
+};
+void Member::setMyHouse(House *house) {
+    this->myHouse = house;
+}
+void Member::setNumOfHouse(int numOfHouse) {
+    this->numOfHouse = numOfHouse;
+}
+void Member::setOccupyingHouse(House *house) {
+    this->occuppyingHouse = house;
+}
+void Member::setNumOfOccupyHouse(int num) {
+    this->numOfHouse = num;
 }
 
 //Getters
@@ -169,27 +196,9 @@ int Member::getNumOfHouse() {
 std::vector<Request*> &Member::getMyRequest(){
     return this->myRequests;
 }
-void getHouse() {}
-void getReview() {}
-void getocuppyingHouse() {}
-
-//Setters
-void Member::setName(std::string fullname) {
-    this->fullname = fullname;
+House *Member::getocuppyingHouse() {
+    return this->occuppyingHouse;
 }
-void Member::setphoneNo(std::string phoneNo) {
-    this->phoneNo = phoneNo;
-}
-void Member::setUserName(std::string username){
-    this->username= username;
-};
-void Member::setPassword(std::string password){
-    this->password= password;
-};
-void Member::setMyHouse(House *house) {
-    this->myHouse = house;
-}
-
-void Member::setNumOfHouse(int numOfHouse) {
-    this->numOfHouse = numOfHouse;
+int Member::getNumOfOccupyHouse() {
+    return this->numOfOccupyHouse;
 }

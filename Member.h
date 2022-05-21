@@ -5,8 +5,9 @@
 
 #include "House.h"
 #include "Request.h"
-#include <iostream>
 #include <vector>
+
+class House; //Forward declaration
 
 class Member {
 private:
@@ -20,13 +21,14 @@ private:
     std::string review;
     int rating;
     int creditPoints;
-    House ocuppyingHouse;
+    House *occuppyingHouse;
+    int numOfOccupyHouse;
 public:
     //Constructor
     Member();
     Member(std::string username, std::string password, std::string fullname, std::string phoneNumber);
     Member(std::string username, std::string password, std::string fullname, std::string phoneNumber,
-            int creditPoints, int rating); //This constructor is called in System::loadData
+            int creditPoints, int rating, int numOfOccupyingHouse); //This constructor is called in System::loadData
 
     //Functions
     void addHouse(std::vector<House*> &houses, std::string username);
@@ -44,7 +46,10 @@ public:
     void setUserName(std::string username);
     void setPassword(std::string password);
     void setMyHouse(House *house);
+    void setRating(int rating);
     void setNumOfHouse(int numOfHouse);
+    void setOccupyingHouse(House *occupyingHouse);
+    void setNumOfOccupyHouse(int numOfOccupyHouse);
 
     //Getters
     std::string getName();
@@ -54,12 +59,10 @@ public:
     House *getMyHouse();
     std::vector<Request*> &getMyRequest();
     int getNumOfHouse();
-    void getHouse();
-    void getReview();
     int getRating();
     int getCreditPts();
-    void getocuppyingHouse();
-
+    House *getocuppyingHouse();
+    int getNumOfOccupyHouse();
 };
 
 //#endif

@@ -10,7 +10,7 @@ House::House(std::string owner, std::string location, std::string description, b
     this->rating = 0;
 }
 //This constructor is called in System::loadData
-House::House(std::string owner, std::string location, std::string description, bool availability, int reqCreditPoints, int reqRating, int rating){
+House::House(std::string owner, std::string location, std::string description, bool availability, int reqCreditPoints, int reqRating, int rating, int numOfOccupier){
     this->owner = owner;
     this->location = location;
     this->description = description;
@@ -18,6 +18,7 @@ House::House(std::string owner, std::string location, std::string description, b
     this->requiredCreditPoints = reqCreditPoints;
     this->requiredRating = reqRating;
     this->rating = rating;
+    this->numOfOccupier = numOfOccupier;
 }
 
 void House::showInfo() {
@@ -37,6 +38,18 @@ void House::setAvailability(bool availability) {
 void House::setRequiredCreditPoints(int reqCreditPoints) {
     this->requiredCreditPoints = reqCreditPoints;
 }
+void House::setRating(int rating) {
+    this->rating = rating;
+}
+void House::setReview(std::string review) {
+    this->review = review;
+}
+void House::setOccupier(Member *occupier) {
+    this->occupier = occupier;
+}
+void House::setNumOfOccupier(int num) {
+    this->numOfOccupier = num;
+}
 
 //Getters
 bool House::getAvailability() {
@@ -45,6 +58,15 @@ bool House::getAvailability() {
 int House::getRating(){
     return this->rating;
 }
-std::string House::getOwnerUsername(){
+std::string House::getReview() {
+    return this->review;
+}
+std::string House::getOwnerUsername() {
     return this->owner;
+}
+int House::getNumOfOccupier() {
+    return this->numOfOccupier;
+}
+Member* House::getOccupier() {
+    return this->occupier;
 }

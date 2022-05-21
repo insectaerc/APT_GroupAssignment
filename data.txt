@@ -1,15 +1,15 @@
 Member|
-username1|pwd1|name1|phone1|500|9|
-username2|pwd2|name2|phone2|500|10|
-username3|pwd3|name3|phone3|500|10|
-username4|pwd4|name4|phone4|500|10|
-q|1|Quan Tran|090909|500|0|
-q1|1|QT|08498|500|0|
-q2|1|QT|124124125|500|0|
+username1|pwd1|name1|phone1|500|9|0|
+username2|pwd2|name2|phone2|500|10|0|
+username3|pwd3|name3|phone3|500|10|0|
+username4|pwd4|name4|phone4|500|10|1|
+q|1|Quan Tran|090909|500|0|0|
+q1|1|QT|08498|500|0|0|
+q2|1|QT|124124125|500|0|0|
 House|
-username1|Hanoi|description1|1|200|10|5|
-username2|Saigon|description2|0|300|10|5|
-username3|Da Nang|description3|1|400|7|5|
-username4|Saigon|description4|0|500|8|5|
+username1|Hanoi|description1|1|200|10|5|1|
+username2|Saigon|description2|0|300|10|5|0|
+username3|Da Nang|description3|1|400|7|5|0|
+username4|Saigon|description4|0|500|8|5|0|
 Request|
 username1|username4|Accepted|
