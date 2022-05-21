@@ -189,3 +189,7 @@ void Member::setPassword(std::string password){
 void Member::setMyHouse(House *house) {
     this->myHouse = house;
 }
+
+void Member::setNumOfHouse(int numOfHouse) {
+    this->numOfHouse = numOfHouse;
+}
