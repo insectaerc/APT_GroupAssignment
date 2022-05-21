@@ -82,6 +82,14 @@ void System::loadData(){
             if(numOfRequestValue == 3) {
                 requestStatus = tempStr;
                 Request *request = new Request(ownerUsername, occupierUsername, requestStatus);
+                if(requestStatus.compare("Accepted") == 0) {
+                    std::cout << "Accepted\n";
+                    for(int i = 0; i < members.size(); i++) {
+                        if(ownerUsername.compare(members[i]) == 0) {Member *owner = members[i];}
+                        if(occupierUsername.compare(members[i]) == 0) {Member *occupier = members[i]}
+
+                    }
+                }
                 this->requests.push_back(request);
                 numOfRequestValue = 0;
                 continue;
@@ -144,8 +152,6 @@ void System::saveData(){
 }
 
 void System::mainMenu(){
-    std::cout << "Mem: " << this->members[3]->getNumOfOccupyHouse();
-    std::cout << ", House: " << this->houses[0]->getNumOfOccupier();
 
     //Show Options
     std::cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
@@ -337,6 +343,7 @@ void System::memberMenu(){
     int rating_option;
     int rating;
     std::string review;
+    std::string occupierUsername;
     while(1) {
         switch(getInput(choice)){
         case 1:
@@ -413,8 +420,15 @@ void System::memberMenu(){
                     this->memberMenu();
                 }else{
                     //this->loggedInMember->requestOccupy(availableHouses, occupyChoice, this->requests);
-                    this->loggedInMember->acceptRequest(requestChoice);
-
+                    occupierUsername = this->loggedInMember->acceptRequest(requestChoice);
+                    for(int i = 0; i < this->members.size(); i++) {
+                        if(occupierUsername.compare(this->members[i]->getUsername()) == 0) {
+                            this->members[i]->setOccupyingHouse(this->loggedInMember->getMyHouse());
+                            this->loggedInMember->getMyHouse()->setOccupier(members[i]);
+                        }
+                    }
+                    //loginmem->myHouse->setOccupier(requester)
+                    //Requester->setocchouse(logimem->myHouse) 
                     //requester.setOChouse;
                     std::cin.ignore();
                     this->toMemberMenu();
@@ -438,12 +452,12 @@ void System::memberMenu(){
                 else {
                     std::cout << "\nEnter your rating (-10 to 10): ";
                     getInput(rating);
-                    this->loggedInMember->getocuppyingHouse()->setRating(rating);
+                    this->loggedInMember->getOcuppyingHouse()->setRating(rating);
                     std::cout << "Enter you review: ";
                     std::getline(std::cin, review);
-                    this->loggedInMember->getocuppyingHouse()->setReview(review);
-                    std::cout << "Rating: " << this->loggedInMember->getocuppyingHouse()->getRating() << std::endl;
-                    std::cout << "Review: " << this->loggedInMember->getocuppyingHouse()->getReview() << std::endl;
+                    this->loggedInMember->getOcuppyingHouse()->setReview(review);
+                    std::cout << "Rating: " << this->loggedInMember->getOcuppyingHouse()->getRating() << std::endl;
+                    std::cout << "Review: " << this->loggedInMember->getOcuppyingHouse()->getReview() << std::endl;
                     this->toMemberMenu();
                     break;
                 }
@@ -451,6 +465,7 @@ void System::memberMenu(){
                     std::cout << "\nEnter your rating (-10 to 10): ";
                     getInput(rating);
                     this->loggedInMember->getMyHouse()->getOccupier()->setRating(rating);
+                    std::cin.ignore();
                     this->toMemberMenu();
                     break;
                 case 0: //Return
@@ -626,7 +641,7 @@ void System::showHousesGuest(){
     std::cout << std::endl;
 }
 
-void System::showHousesMember(){
+void System::showHousesMember() {
     int city_option;
     int choice;
     bool loop = true;

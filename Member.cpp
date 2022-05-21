@@ -120,7 +120,7 @@ bool Member::viewRequests() {
     }else{return true;}
 }
 
-void Member::acceptRequest(int requestChoice){
+std::string Member::acceptRequest(int requestChoice){
     Request *acceptedReq;
     for(int i = 0; i < this->myRequests.size(); i++){
         if(requestChoice == i+1){
@@ -132,6 +132,7 @@ void Member::acceptRequest(int requestChoice){
     }
     std::cout << "\nYou've successfully accepted the request of the member with username: ";
     std::cout << acceptedReq->getOccupierUsername() << ".\n";
+    return acceptedReq->getOccupierUsername();
 }
 
 void Member::showInfo() {
@@ -155,6 +156,9 @@ void Member::setUserName(std::string username){
 void Member::setPassword(std::string password){
     this->password= password;
 };
+void Member::setRating(int rating) {
+    this->rating = rating;
+}
 void Member::setMyHouse(House *house) {
     this->myHouse = house;
 }
@@ -196,7 +200,7 @@ int Member::getNumOfHouse() {
 std::vector<Request*> &Member::getMyRequest(){
     return this->myRequests;
 }
-House *Member::getocuppyingHouse() {
+House *Member::getOcuppyingHouse() {
     return this->occuppyingHouse;
 }
 int Member::getNumOfOccupyHouse() {

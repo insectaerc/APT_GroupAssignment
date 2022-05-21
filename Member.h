@@ -37,7 +37,7 @@ public:
     bool searchHouses(std::string cityName, std::vector<House*> houses, std::vector<House*> &availableHouses);
     void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests);
     bool viewRequests();
-    void acceptRequest(int requestChoice);
+    std::string acceptRequest(int requestChoice);
     void showInfo();
 
     //Setters
@@ -61,7 +61,7 @@ public:
     int getNumOfHouse();
     int getRating();
     int getCreditPts();
-    House *getocuppyingHouse();
+    House *getOcuppyingHouse();
     int getNumOfOccupyHouse();
 };
 
