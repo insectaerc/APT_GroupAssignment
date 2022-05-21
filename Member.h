@@ -16,6 +16,7 @@ private:
     std::string phoneNo;
     House *myHouse;
     std::vector<Request*> myRequests;
+    int numOfHouse;
     std::string review;
     int rating;
     int creditPoints;
@@ -43,6 +44,7 @@ public:
     void setUserName(std::string username);
     void setPassword(std::string password);
     void setMyHouse(House *house);
+    void setNumOfHouse(int numOfHouse);
 
     //Getters
     std::string getName();
@@ -51,6 +53,7 @@ public:
     std::string getPassword();
     House *getMyHouse();
     std::vector<Request*> &getMyRequest();
+    int getNumOfHouse();
     void getHouse();
     void getReview();
     int getRating();

@@ -26,6 +26,7 @@ class House{
 
         //Setters
         void setAvailability(bool availability);
+        void setRequiredCreditPoints(int reqCreditPoints);
 
         //Getters
         bool getAvailability();

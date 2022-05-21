@@ -1,4 +1,5 @@
 #include "Member.h"
+#include "Input.h"
 #include <iostream>
 #include <string.h>
 #include <fstream>
@@ -30,18 +31,27 @@ Member::Member(std::string username, std::string password, std::string fullname,
 
 //Functions
 void Member::addHouse(std::vector<House*> &houses, std::string username) {
-    std::string location, description;
-    std::cout << "Enter location: ";
-    std::getline(std::cin,location);
-    std::cout << "Enter description: ";
-    std::getline(std::cin,description);
-    House *newhouse = new House(username, location, description, 0);
-    houses.push_back(newhouse);
-    std::cout << "New House Added!!!\n";
-    for(int i = 0; i < houses.size(); i++) {
-        houses[i]->showInfo();
+    if(this->numOfHouse == 1) {
+        std::cout << "You can only have one house!!!\n";
+    }
+    else {
+        std::string location, description;
+        int reqCreditPoints;
+        std::cout << "Enter location: ";
+        std::getline(std::cin,location);
+        std::cout << "Enter description: ";
+        std::getline(std::cin,description);
+        std::cout << "Minimum required credit point: ";
+        getInput(reqCreditPoints);
+        House *newhouse = new House(username, location, description, 0);
+        newhouse->setRequiredCreditPoints(reqCreditPoints);
+        houses.push_back(newhouse);
+        setMyHouse(newhouse);
+        std::cout << "New House Added!!!\n";
+        this->setNumOfHouse(1);
     }
 }
+
 
 void Member::list(House *myHouse) {
     if(myHouse->getAvailability() == 0) {
@@ -152,6 +162,9 @@ int Member::getRating() {
 }
 House *Member::getMyHouse() {
     return this->myHouse;
+}
+int Member::getNumOfHouse() {
+    return this->numOfHouse;
 }
 std::vector<Request*> &Member::getMyRequest(){
     return this->myRequests;

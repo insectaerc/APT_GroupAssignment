@@ -34,6 +34,9 @@ void House::showAvailability() {
 void House::setAvailability(bool availability) {
     this->availability = availability;
 }
+void House::setRequiredCreditPoints(int reqCreditPoints) {
+    this->requiredCreditPoints = reqCreditPoints;
+}
 
 //Getters
 bool House::getAvailability() {
