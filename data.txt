@@ -13,7 +13,7 @@ Request|
 username1|username4|Accepted|
 username1|username2|Rejected|
 username1|username3|Pending|
-username2|username3|Accepted|
+username2|username3|Pending|
 username2|hoangninh99|Pending|
 Review|
 house|username1|username4|nice house|

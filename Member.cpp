@@ -107,7 +107,8 @@ void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice,
 
 bool Member::viewRequests() {
     system("cls");
-    if(this->myHouse->getAvailability() == true){
+    if(this->myHouse->getAvailability() == 1){
+        std::cout << this->myHouse->getAvailability();
         int numOfReq = 0;
         std::cout << "List of all requests to your listed house:\n\n";
         for(int i = 0; i < this->myRequests.size(); i++){

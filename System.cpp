@@ -447,6 +447,7 @@ void System::memberMenu(){
             break;
         case 5: //View requests
             if(this->loggedInMember->viewRequests() == false){
+                std::cin.ignore();
                 this->toMemberMenu();
             }else{
                 int requestChoice;
@@ -470,6 +471,7 @@ void System::memberMenu(){
                             //Update owner's information
                             this->loggedInMember->getMyHouse()->setOccupier(members[i]);
                             this->loggedInMember->getMyHouse()->setOccupierUsername(occupierUsername);
+                            this->loggedInMember->getMyHouse()->setAvailability(0);
                         }
                     }
                     std::cin.ignore();
