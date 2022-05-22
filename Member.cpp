@@ -35,7 +35,7 @@ Member::Member(std::string username, std::string password, std::string fullname,
 //Functions
 void Member::addHouse(std::vector<House*> &houses, std::string username) {
     if(this->numOfHouse == 1) {
-        std::cout << "You can only have one house!!!\n";
+        std::cout << "You can only add one house per account!!!\n";
     }
     else {
         std::string location, description;
@@ -51,7 +51,6 @@ void Member::addHouse(std::vector<House*> &houses, std::string username) {
         getInput(reqRating);
         House *newhouse = new House(username, location, description, availability, reqCreditPoints, reqRating);
         houses.push_back(newhouse);
-        setMyHouse(newhouse);
         std::cout << "New House Added!!!\n";
         this->setNumOfHouse(1);
     }

@@ -399,7 +399,6 @@ void System::memberMenu(){
             std::cin.ignore();
             this->loggedInMember->addHouse(this->houses, this->loggedInMember->getUsername());
             this->loggedInMember->setMyHouse(houses.back());
-            std::cin.ignore();
             this->toMemberMenu();
             break;
         case 3: //List/Unlist Houses
