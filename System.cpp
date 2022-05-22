@@ -689,10 +689,11 @@ void System::showHousesGuest(){         //Being called in guestMenu() if user se
     for(House *eachHouse : this->houses){
         if(eachHouse->getAvailability() == 1){
             order++;
-            std::cout << order << ". \n";
-            std::cout   << "Location: " << eachHouse->location
-                        << ", Owner:" << eachHouse->owner << "\n"
-                        << "Description: " << eachHouse->description << "\n";
+            std::cout << order << ". ";
+            
+            std::cout   << "Owner: " << eachHouse->owner 
+                        << "  -  City: " << eachHouse->location
+                        << "  -  Description: " << eachHouse->description << "\n";
         }
     }
     std::cout << std::endl;

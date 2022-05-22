@@ -39,15 +39,17 @@ void Member::addHouse(std::vector<House*> &houses, std::string username) {
     }
     else {
         std::string location, description;
-        int reqCreditPoints;
-        std::cout << "Enter location: ";
+        int reqCreditPoints, reqRating;
+        int availability = 1;
+        std::cout << "Enter location (Saigon/Hanoi/Da Nang): ";
         std::getline(std::cin,location);
         std::cout << "Enter description: ";
         std::getline(std::cin,description);
-        std::cout << "Minimum required credit point: ";
+        std::cout << "Minimum required credit points: ";
         getInput(reqCreditPoints);
-        House *newhouse = new House(username, location, description, 0);
-        newhouse->setRequiredCreditPoints(reqCreditPoints);
+        std::cout << "Minimum required rating points: ";
+        getInput(reqRating);
+        House *newhouse = new House(username, location, description, availability, reqCreditPoints, reqRating);
         houses.push_back(newhouse);
         setMyHouse(newhouse);
         std::cout << "New House Added!!!\n";

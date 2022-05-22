@@ -24,7 +24,7 @@ class House{
         int requiredCreditPoints;
         House();
         //This constructor is called is Member::addHouse
-        House(std::string owner, std::string location, std::string description, bool availability);
+        House(std::string owner, std::string location, std::string description, bool availability, int reqCrePoints, int reqRating);
         //This constructor is called in System::loadData
         House(std::string owner, std::string location, std::string description, bool availability, int creditPoints, int reqRating, int rating, std::string review, int numOfOccupier, std::string occupierUsername);
 

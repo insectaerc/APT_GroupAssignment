@@ -2,13 +2,16 @@
 #include <iostream>
 
 House::House(){}
-House::House(std::string owner, std::string location, std::string description, bool availability){
+House::House(std::string owner, std::string location, std::string description, bool availability, int reqCrePoints, int reqRating){
     this->owner = owner;
     this->location = location;
     this->description = description;
     this->availability = availability;
+    this->requiredCreditPoints = reqCrePoints;
+    this->requiredRating = reqRating;
     this->rating = 0;
     this->occupierUsername = "";
+    this->numOfOccupier = 0;
 }
 //This constructor is called in System::loadData
 House::House(std::string owner, std::string location, std::string description, bool availability, int reqCreditPoints, int reqRating, int rating, std::string review, int numOfOccupier, std::string occupierUsername){
