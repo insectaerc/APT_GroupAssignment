@@ -3,19 +3,22 @@ username1|pwd1|name1|phone1|500|9|0|
 username2|pwd2|name2|phone2|500|10|0|
 username3|pwd3|name3|phone3|500|8|0|
 username4|pwd4|name4|phone4|500|8|0|
-hoangninh99|hoangninh123|Ninh Trong Hoang|0987789999|500|0|0|
+hoangninh99|hoangninh123|Ninh Trong Hoang|0987789999|500|0|1|
 House|
 username1|Hanoi|description1|0|200|10|9|lovely|1|username4|
-username2|Saigon|description2|1|300|0|5|nice|0|hoangninh99|
+username2|Saigon|description2|0|300|0|9|the house is so pretty|0|hoangninh99|
 username3|Da Nang|description3|1|400|7|5|okay|0||
 username4|Saigon|description4|1|500|0|9|so so|0||
+hoangninh99|Saigon|located on 11/2 Le Loi st, 3 bedrooms.|1|350|0|0||0||
 Request|
 username1|username4|Accepted|
 username1|username2|Rejected|
 username1|username3|Pending|
-username2|username3|Pending|
-username2|hoangninh99|Pending|
+username2|username3|Rejected|
+username2|hoangninh99|Accepted|
 Review|
 house|username1|username4|nice house|
 occupier|username1|username2|nice customer|
 house|test1|test11|test11|
+house|username2|hoangninh99|the house is so pretty|
+occupier|hoangninh99|username2|he is neat|

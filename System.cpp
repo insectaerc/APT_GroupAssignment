@@ -409,8 +409,10 @@ void System::memberMenu(){
                 this->toMemberMenu();
             }
             else {
-                this->loggedInMember->showInfo();
-                this->loggedInMember->getMyHouse()->showInfo();
+                //this->loggedInMember->showInfo();
+                //this->loggedInMember->getMyHouse()->showInfo();
+                system("cls");
+                std::cout << "********** LISTING **********\n";
                 std::cout << "1. List house" << std::endl;
                 std::cout << "2. Unlist house" << std::endl;
                 std::cout << "0. Return to Member menu" << std::endl;
@@ -467,6 +469,7 @@ void System::memberMenu(){
                         if(occupierUsername.compare(this->members[i]->getUsername()) == 0) {
                             //Update requester's occupying house to the house of the owner (the current user)
                             this->members[i]->setOccupyingHouse(this->loggedInMember->getMyHouse());
+                            this->members[i]->setNumOfOccupyHouse(1);
                             //Update owner's information
                             this->loggedInMember->getMyHouse()->setOccupier(members[i]);
                             this->loggedInMember->getMyHouse()->setOccupierUsername(occupierUsername);
@@ -500,7 +503,8 @@ void System::memberMenu(){
                     std::cout << "Enter you review: ";
                     std::cin.ignore();
                     std::getline(std::cin, review);
-                    this->loggedInMember->getOcuppyingHouse()->setReview(review);
+                    newReview=  new Review("house", this->loggedInMember->getOcuppyingHouse()->getOwnerUsername(), this->loggedInMember->getUsername(), review);
+                    this->reviews.push_back(newReview);
                     std::cout << "\nSuccessfully rated!\n";
                     this->toMemberMenu();
                     break;
@@ -508,7 +512,6 @@ void System::memberMenu(){
                 case 2: //Occupier Rating
                     std::cout << "\nEnter your rating (-10 to 10): ";
                     getInput(rating);
-                    this->loggedInMember->getMyHouse()->getOccupier()->setRating(rating);
                     std::cout << "Enter you review: ";
                     std::cin.ignore();
                     std::getline(std::cin, review);

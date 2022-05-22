@@ -83,7 +83,7 @@ bool Member::searchHouses(std::string city, std::vector<House*> houses, std::vec
     for(int i = 0; i < houses.size(); i++){
         if( city.compare(houses[i]->location) == 0 && 
             this->creditPoints >= houses[i]->requiredCreditPoints &&
-            this->rating >= houses[i]->requiredRating){
+            this->rating >= houses[i]->requiredRating && houses[i]->getOwnerUsername() != this->username){
             std::cout << order + 1 << ". ";
             houses[i]->showInfo();
             availableHouses.push_back(houses[i]);
