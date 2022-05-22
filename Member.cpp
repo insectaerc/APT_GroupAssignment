@@ -12,6 +12,7 @@
 Member::Member() {
     this->creditPoints = 500;
     this->rating = 0;
+    this->numOfOccupyHouse = 0;
 }
 Member::Member(std::string username, std::string password, std::string fullname, std::string phoneNumber){
     this->username = username;

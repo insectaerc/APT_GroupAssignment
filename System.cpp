@@ -106,6 +106,7 @@ void System::loadData(){
             }
         }
     }
+    std::cout << "\nData loaded Successfully.\n";
     myFile.close();
 }
 
@@ -154,7 +155,7 @@ void System::saveData(){
 void System::mainMenu(){
 
     //Show Options
-    std::cout << "\nUse the app as: 1. Guest, 2. Member, 3. Admin\n";
+    std::cout << "\nUse the app as:\n1. Guest\n2. Member\n3. Admin\n";
     std::cout << "0. EXIT\n";
     std::cout << "\nEnter your choice: ";
     bool loop = 1;
@@ -207,7 +208,8 @@ void System::guestMenu(){
             std::cin.ignore();
             system("cls");
             //Get info from user
-            std::cout << "Enter your full name: ";
+            std::cout << "********** REGISTER **********\n";
+            std::cout << "\nEnter your full name: ";
             std::getline(std::cin, fullname);
             std::cout << "Enter your phone Number: ";
             std::getline(std::cin, phoneNo);
@@ -246,7 +248,7 @@ void System::guestMenu(){
                 }
             }
             std::cout << "\nRegister Succesfully!!!\n";
-            std::cout << "Press Enter to go to member menu....";
+            std::cout << "Press Enter to go to main menu...";
             std::cin.ignore();
             system("cls");
             this->memberMenu();
@@ -255,6 +257,7 @@ void System::guestMenu(){
             //View House Menu
             system("cls");
             this->showHousesGuest();
+            std::cin.ignore();
             std::cout << "Press Enter to return to main menu....";
             std::cin.ignore();
             system("cls");
@@ -276,7 +279,7 @@ void System::memberMenu(){
     std::string username, password;
   
     system("cls");
-
+    
     bool loop = 1;
     bool loop2 = 1;
     while(loop) {
@@ -284,6 +287,7 @@ void System::memberMenu(){
             loop = 0;
             break;
         }
+        std::cout << "********** LOGIN **********\n";
         loginInput(&username, &password);
         if(this->isLoggedIn(username, password) == false) {
             std::cout << "Wrong password or username!!!\n";
@@ -350,7 +354,7 @@ void System::memberMenu(){
     //Member* member = this->members.back();
   
     //system("cls");
-    std::cout << "\n***** MEMBER MENU *****\n\n";
+    std::cout << "***** MEMBER MENU *****\n\n";
     std::cout << "1. View Information\n";
     std::cout << "2. Add House\n";
     std::cout << "3. List/Unlist House\n";
@@ -589,7 +593,6 @@ void System::adminMenu() {
 }
 
 void System::loginInput(std::string *u, std::string *p){
-    std::cout << "--------------LOGIN--------------\n";
     while(1) {
         std::cout << "Enter username: ";
         std::getline(std::cin, *u);
@@ -664,11 +667,14 @@ std::string System::toLowercase(std::string str){
 }
 
 void System::showHousesGuest(){
-    std::cout << "All houses information:\n";
+    std::cout << "\nAll available houses:\n";
     for(House *eachHouse : this->houses){
         std::cout << "-------------------------------------\n";
-        std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
+        if(eachHouse->getAvailability() == 1){
+            std::cout << "Location: " << eachHouse->location << ", Owner:" << eachHouse->owner << "\n"
         << "Description: " << eachHouse->description << "\n";
+        }
+        
     }
     std::cout << std::endl;
 }
