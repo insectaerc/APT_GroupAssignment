@@ -20,13 +20,7 @@ class Admin
     public:
         // Constructors
         Admin(); // Default
-        Admin(string username, string password);
-        // Functions
-        // void viewMemberInfo();
-        // void viewHousesInfo();
-        // Getters
-        // void getUsername();
-        // void getPassword();
+        Admin(string username, string password);=
 };
 
 // #endif
