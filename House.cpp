@@ -27,7 +27,12 @@ House::House(std::string owner, std::string location, std::string description, b
 void House::showInfo() {
     std::cout << "Owner: " << this->owner << ", location: " << this->location << ", description: "
     << this->description << ", minimum credit points: " << this->requiredCreditPoints << ", minimum rating: "
-    << this->rating << ", occupied by: " << this->occupierUsername << "\n";
+    << this->rating;
+    if(this->occupierUsername.compare("") != 0){
+        std::cout << ", occupied by: " << this->occupierUsername << "\n";
+    }else{
+        std::cout << "\n";
+    }
 }
 
 void House::showAvailability() {

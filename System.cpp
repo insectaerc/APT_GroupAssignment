@@ -354,16 +354,14 @@ void System::memberMenu(){
                 }
             }
 
-            std::cout << "Logged In Successfully!\n";
+            system("cls");
+            std::cout << "\nLogged In Successfully!\n";
 
             break;
         }
     }
 
-    //Member* member = this->members.back();
-  
-    //system("cls");
-    std::cout << "***** MEMBER MENU *****\n\n";
+    std::cout << "\n***** MEMBER MENU *****\n\n";
     std::cout << "1. View Information\n";
     std::cout << "2. Add House\n";
     std::cout << "3. List/Unlist House\n";
@@ -440,11 +438,7 @@ void System::memberMenu(){
             break;
         case 5: //View requests
             if(this->loggedInMember->viewRequests() == false){
-                std::cout << "\n\nPress Enter to return to main menu.";
-                std::cin.ignore();
-                std::cin.ignore();
-                system("cls");
-                this->memberMenu();
+                this->toMemberMenu();
             }else{
                 int requestChoice;
                 std::cout << "\nSelect the request that you wish to accept, if you want go back to main menu please enter 0: ";
@@ -523,6 +517,7 @@ void System::memberMenu(){
             break;
         case 0:
             system("cls");
+            this->isLoggedInVar = false;
             this->mainMenu();
             break;
         default:
@@ -540,6 +535,11 @@ void System::adminMenu() {
     bool loop = 1;
     bool loop2 = 1;
     while(loop) {
+        if(this->isLoggedInVar == true){
+            loop = 0;
+            break;
+        }
+        std::cout << "********** LOGIN **********\n\n";
         loginInput(&username, &password);
         if(this->isLoggedInAdmin(username, password) == false) {
             std::cout << "Wrong password or username!!!\n";
@@ -561,8 +561,9 @@ void System::adminMenu() {
             }
         }
         else {
-            std::cout << "Logged In Successfully!\n";
+            this->isLoggedInVar = true;
             system("cls");
+            std::cout << "Logged In Successfully!\n";
             break;
         }
     }
@@ -570,7 +571,7 @@ void System::adminMenu() {
     std::cout << "\n***** ADMIN MENU *****\n\n";
     std::cout << "1. View Members\n";
     std::cout << "2. View Houses\n";
-    std::cout << "0. Return to Main menu\n";
+    std::cout << "0. Log Out\n";
     std::cout << "\nEnter your choice: ";
 
     while(1) {
@@ -581,7 +582,7 @@ void System::adminMenu() {
             std::cout << "\nPress enter to return to main menu....\n";
             std::cin.ignore();
             std::cin.ignore();
-            this->mainMenu();
+            this->adminMenu();
             break;
         case 2: //View Houses information
             system("cls");
@@ -589,10 +590,11 @@ void System::adminMenu() {
             std::cout << "\nPress enter to return to main menu....\n";
             std::cin.ignore();
             std::cin.ignore();
-            this->mainMenu();
+            this->adminMenu();
             break;
         case 0:
             system("cls");
+            this->isLoggedInVar = false;
             this->mainMenu();
             break;
         default:
@@ -657,7 +659,6 @@ bool System::isLoggedInAdmin(std::string username, std::string password){
 
     //Validation
     if(username.compare(u) == 0 && password.compare(p) == 0) {
-        std::cout << "\nAdmin logged in successfully!\n";
         return true;
     }
     else {
@@ -789,14 +790,15 @@ void System::showHousesMember() {
 
 void System::showMembersAdmin(){
     std::cout << "\n\nMembers Information:\n";
+    int order = 0;
     for (Member *eachMember : this->members) {
-        std::cout << "\nUsername: " << eachMember->getUsername()
+        order++;
+        std::cout << order << ". "
+                  << "\nUsername: " << eachMember->getUsername()
                   << "\nFullname: " << eachMember->getName()
                   << "\nPhone number: " << eachMember->getphoneNo()
                   << "\nRating: " << eachMember->getRating()
                   << "\nCredit point: " << eachMember->getCreditPts() << "\n";
-                  //<< "\n House location: " << eachMember->myHouse->location
-                  //<< "\n House description: " << eachMember->myHouse->description << "\n";
     }
 }
 
@@ -805,10 +807,12 @@ void System::showHousesAdmin(){
     for (House *eachHouse : houses) {
         std::cout << "\nLocation: " << eachHouse->location
                   << "\nDescription: " << eachHouse->description
-                  //<< "\n Rating: " << house->rating
-                  << "\nOwner: " << eachHouse->owner << "\n";
-                  //<< "\n Review: " << house->review
-                  //<< "\n Availability: " << house->availability << "\n";
+                  << "\nOwner: " << eachHouse->owner;
+        if(eachHouse->getOccupierUsername().compare("") != 0){
+            std::cout << ", being occupied by: " << eachHouse->getOccupierUsername() << "\n";
+        }else{
+            std::cout << "\n";
+        }
     }
 }
 
