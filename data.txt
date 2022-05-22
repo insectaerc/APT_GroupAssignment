@@ -3,6 +3,7 @@ username1|pwd1|name1|phone1|500|9|0|
 username2|pwd2|name2|phone2|500|10|0|
 username3|pwd3|name3|phone3|500|8|0|
 username4|pwd4|name4|phone4|500|8|0|
+hoangninh99|hoangninh123|Ninh Trong Hoang|0987789999|500|0|0|
 House|
 username1|Hanoi|description1|1|200|10|9|lovely|1|username4|
 username2|Saigon|description2|0|300|10|5|nice|0||

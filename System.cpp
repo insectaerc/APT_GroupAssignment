@@ -322,50 +322,52 @@ void System::memberMenu(){
                         std::cout << "\nInvalid Choice. Enter again: ";
                 }
             }
-        }
-    }
-
-    //If validated, load data to neccessary attibutes that will be used later
-    //Update System::isLoggedInVar varibale
-    this->isLoggedInVar = true;
-    //Load data into System::loggedInMember object
-    std::string tempStr;
-    for(int i = 0; i < this->members.size(); i++) {
-        tempStr = this->members[i]->getUsername();
-        if(tempStr.compare(username) == 0) {
-            this->loggedInMember = members[i];
-        }
-    }
-    //Load data into System::loggedInMember->requests
-    for(Request *eachReq : this->requests){
-        if(eachReq->getOwnerUsername() == this->loggedInMember->getUsername()){
-            this->loggedInMember->getMyRequest().push_back(eachReq);
-        }
-    }
-    //Load data of myHouse objects that belong to member objects
-    for(int i = 0; i < this->members.size(); i++) {
-        for(int j = 0; j < this->houses.size(); j++) {
-            if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
-                this->members[i]->setMyHouse(this->houses[j]);
-                this->members[i]->setNumOfHouse(1);
+        }else{
+            //If validated, load data to neccessary attibutes that will be used later
+            //Update System::isLoggedInVar varibale
+            this->isLoggedInVar = true;
+            //Load data into System::loggedInMember object
+            std::string tempStr;
+            for(int i = 0; i < this->members.size(); i++) {
+                tempStr = this->members[i]->getUsername();
+                if(tempStr.compare(username) == 0) {
+                    this->loggedInMember = members[i];
+                }
             }
+            //Load data into System::loggedInMember->requests
+            for(Request *eachReq : this->requests){
+                if(eachReq->getOwnerUsername() == this->loggedInMember->getUsername()){
+                    this->loggedInMember->getMyRequest().push_back(eachReq);
+                }
+            }
+            //Load data of myHouse objects that belong to member objects
+            for(int i = 0; i < this->members.size(); i++) {
+                for(int j = 0; j < this->houses.size(); j++) {
+                    if(this->members[i]->getUsername().compare(this->houses[j]->owner) == 0) {
+                        this->members[i]->setMyHouse(this->houses[j]);
+                        this->members[i]->setNumOfHouse(1);
+                    }
+                }
+            }
+
+            //Load data into System::loggedInMember->occupyingHouse object
+            for(int i = 0; i < this->houses.size(); i++){
+                if(this->houses[i]->getOccupierUsername().compare(this->loggedInMember->getUsername()) == 0){
+                    this->loggedInMember->setOccupyingHouse(this->houses[i]);
+                }
+            }
+            //Load reviews of user
+            for(int i = 0; i < this->reviews.size(); i++){
+                if(this->reviews[i]->getReceiverUsername().compare(this->loggedInMember->getUsername()) == 0){
+                    this->loggedInMember->getMyReview().push_back(this->reviews[i]);
+                }
+            }
+            system("cls");
+            std::cout << "\nLogged In Successfully!\n";
         }
     }
 
-    //Load data into System::loggedInMember->occupyingHouse object
-    for(int i = 0; i < this->houses.size(); i++){
-        if(this->houses[i]->getOccupierUsername().compare(this->loggedInMember->getUsername()) == 0){
-            this->loggedInMember->setOccupyingHouse(this->houses[i]);
-        }
-    }
-    //Load reviews of user
-    for(int i = 0; i < this->reviews.size(); i++){
-        if(this->reviews[i]->getReceiverUsername().compare(this->loggedInMember->getUsername()) == 0){
-            this->loggedInMember->getMyReview().push_back(this->reviews[i]);
-        }
-    }
-    system("cls");
-    std::cout << "\nLogged In Successfully!\n";
+    
 
     //Display Member Menu
     std::cout << "\n***** MEMBER MENU *****\n\n";
