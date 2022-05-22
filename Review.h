@@ -7,7 +7,7 @@
 
 class Review{
     private:
-        std::string type;
+        std::string type;       //"occupier" or "house"
         std::string receiverUsername;
         std::string writerUsername;
         std::string content;

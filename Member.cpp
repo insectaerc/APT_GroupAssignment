@@ -143,11 +143,18 @@ std::string Member::acceptRequest(int requestChoice){
 
 void Member::showInfo() {
     std::cout << "--------------MEMBER INFORMATION--------------\n";
-    std::cout << "_Full Name: " << this->fullname + "\n" 
+    std::cout << "\n_Full Name: " << this->fullname + "\n" 
             << "_Phone Number: " << this->phoneNo + "\n"
             << "_Credit Point: " << this->creditPoints << "\n"
             << "_Rating: " << this->rating << "\n"
-            << "_Review: \n";
+            << "_Reviews about your house: \n";
+    for (Review *eachReview : this->myReviews){
+        if(eachReview->getType().compare("house") == 0){
+            std::cout << "+Review from: " << eachReview->getWriterUsername();
+            std::cout << ", content: " << eachReview->getContent() << "\n";
+        }
+    }
+    std::cout << "_Reviews about you: \n";
     for (Review *eachReview : this->myReviews){
         if(eachReview->getType().compare("occupier") == 0){
             std::cout << "+Review from: " << eachReview->getWriterUsername();

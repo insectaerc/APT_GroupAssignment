@@ -149,6 +149,15 @@ void System::saveData(){
                 << this->requests[i]->getStatus() << "|";
     }
     
+    //Save data for Reviews
+    newFile << "\nReview|";
+    for(int i = 0; i < this->reviews.size(); i++){
+        newFile << "\n" + this->reviews[i]->getType() << "|"
+                << this->reviews[i]->getReceiverUsername() << "|"
+                << this->reviews[i]->getWriterUsername() << "|"
+                << this->reviews[i]->getContent() << "|";
+    }
+    
     newFile.close();
 }
 
