@@ -405,7 +405,7 @@ void System::memberMenu(){
         case 3: //List/Unlist Houses
 
             if(this->loggedInMember->getNumOfHouse() == 0) {
-                std::cout << "\nYou do not have a house to list/unlist. Please go back to main menu and select Add House!!!\n";
+                std::cout << "\nYou haven't set any house to this account. Please go back to main menu and select Add House!!!\n";
                 std::cin.ignore();
                 this->toMemberMenu();
             }
