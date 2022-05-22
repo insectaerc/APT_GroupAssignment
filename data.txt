@@ -5,15 +5,16 @@ username3|pwd3|name3|phone3|500|8|0|
 username4|pwd4|name4|phone4|500|8|0|
 hoangninh99|hoangninh123|Ninh Trong Hoang|0987789999|500|0|0|
 House|
-username1|Hanoi|description1|1|200|10|9|lovely|1|username4|
-username2|Saigon|description2|0|300|10|5|nice|0||
+username1|Hanoi|description1|0|200|10|9|lovely|1|username4|
+username2|Saigon|description2|1|300|0|5|nice|0||
 username3|Da Nang|description3|1|400|7|5|okay|0||
-username4|Saigon|description4|0|500|8|9|so so|0||
+username4|Saigon|description4|1|500|0|9|so so|0||
 Request|
 username1|username4|Accepted|
 username1|username2|Rejected|
 username1|username3|Pending|
 username2|username3|Accepted|
+username2|hoangninh99|Pending|
 Review|
 house|username1|username4|nice house|
 occupier|username1|username2|nice customer|

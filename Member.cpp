@@ -93,11 +93,11 @@ bool Member::searchHouses(std::string city, std::vector<House*> houses, std::vec
     if(order == 0){return false;}else{return true;}
 }
 
-void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests){
+void Member::requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> &requests){
     for(int i = 0; i < availableHouses.size(); i++){
         if(houseChoice == i+1){
-            Request *newRequest = new Request(this->username,
-            availableHouses[i]->getOwnerUsername(), "Pending");
+            Request *newRequest = new Request(availableHouses[i]->getOwnerUsername(),
+            this->username, "Pending");
             requests.push_back(newRequest);
             std::cout << "\nYou've successfully requested to occupy the house of the owner with username is "
             << availableHouses[i]->getOwnerUsername() << ". Let's wait for the owner's response.\n";

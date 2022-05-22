@@ -37,7 +37,7 @@ public:
     void list(House *myHouse);
     void unlist(House *myHouse);
     bool searchHouses(std::string cityName, std::vector<House*> houses, std::vector<House*> &availableHouses);
-    void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> requests);
+    void requestOccupy(std::vector<House*> availableHouses, int houseChoice, std::vector<Request*> &requests);
     bool viewRequests();
     std::string acceptRequest(int requestChoice);
     void showInfo();

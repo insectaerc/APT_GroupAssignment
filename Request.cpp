@@ -34,7 +34,7 @@ void Request::setStatus(std::string status){
 
 //Functions
 void Request::showInfo(){
-    std::cout << "Owner Username: " << this->ownerUsername
-    << "\nOccupier's Username: " << this->occupierUsername
+    std::cout << "House's Owner Username: " << this->ownerUsername
+    << "\nRequester's Username: " << this->occupierUsername
     << "\nStatus: " << this->status << "\n";
 }
